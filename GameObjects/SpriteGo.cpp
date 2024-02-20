@@ -8,12 +8,12 @@ SpriteGo::SpriteGo(const std::string& name)
 
 void SpriteGo::SetTexture(const std::string& textureId)
 {
+	this->textureId = textureId;
 	sprite.setTexture(ResourceMgr<sf::Texture>::Instance().Get(textureId));
 }
-
-void SpriteGo::SetTexture(const sf::Texture& texture)
+void SpriteGo::SetTexture()
 {
-	sprite.setTexture(texture);
+	sprite.setTexture(ResourceMgr<sf::Texture>::Instance().Get(textureId));
 }
 
 void SpriteGo::SetPosition(const sf::Vector2f& pos)
@@ -75,4 +75,10 @@ void SpriteGo::SetFlipY(bool filp)
 void SpriteGo::Draw(sf::RenderWindow& window)
 {
 	window.draw(sprite);
+}
+
+void SpriteGo::Reset()
+{
+	GameObject::Reset();
+	sprite.setTexture(ResourceMgr<sf::Texture>::Instance().Get(textureId));
 }

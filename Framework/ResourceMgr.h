@@ -54,12 +54,17 @@ public:
 		return true;
 	}
 
-	T& Get(const std::string& filePath)
+	T& Get(const std::string& filePath, bool load = true)
 	{
 		auto it = resources.find(filePath);
-		if (it == resources.end())
+		if (it != resources.end())
+			return *(it->second);
+
+		if (!load || !Load(filePath))
+		{
 			return Empty;
-		return *(it->second);
+		}
+		return *(resources.find(filePath)->second);
 	}
 
 	ResourceMgr(const ResourceMgr&) = delete;

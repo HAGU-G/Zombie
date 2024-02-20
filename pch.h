@@ -1,5 +1,7 @@
 #pragma once
 
+#define _USE_MATH_DEFINES
+
 // C++
 #include <cstdlib>
 #include <ctime>
@@ -7,6 +9,7 @@
 #include <vector>
 #include <list>
 #include <unordered_map>
+#include <cmath>
 
 // SFML
 #include <SFML/Graphics.hpp>

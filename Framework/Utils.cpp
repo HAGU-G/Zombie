@@ -18,7 +18,7 @@ float Utils::RandomValue()
 float Utils::RandomRange(float min, float max)
 {
 	float value = RandomValue();
-	value *= max - min;	
+	value *= max - min;
 	value += min;
 	return value;
 }
@@ -27,7 +27,7 @@ sf::Vector2f Utils::RandomOnUnitCircle()
 {
 	sf::Transform rotation;
 	rotation.rotate(RandomRange(0.f, 360.f));
-	return rotation * sf::Vector2f (1.f, 0.f);
+	return rotation * sf::Vector2f(1.f, 0.f);
 }
 
 sf::Vector2f Utils::RandomInUnitCircle()
@@ -67,4 +67,66 @@ sf::Vector2f Utils::SetOrigin(sf::Text& obj, Origins originPreset)
 sf::Vector2f Utils::SetOrigin(sf::Shape& obj, Origins originPreset)
 {
 	return SetOrigin(obj, originPreset, obj.getLocalBounds());
+}
+
+float Utils::SqrMagnitude(const sf::Vector2f& vec)
+{
+	return pow(vec.x, 2.f) + pow(vec.y, 2.f);
+}
+
+float Utils::Magnitude(const sf::Vector2f& vec)
+{
+	return sqrt(vec.x* vec.x + vec.y* vec.y);
+}
+
+sf::Vector2f Utils::GetNormalize(const sf::Vector2f& vec)
+{
+	float mag = Magnitude(vec);
+	if (mag == 0.f)
+		return { 0, 0 };
+	return vec / mag;
+}
+
+void Utils::Normalize(sf::Vector2f& vec)
+{
+	float mag = Magnitude(vec);
+	if (mag != 0.f)
+	{
+		vec /= mag;
+	}
+}
+
+float Utils::Distance(const sf::Vector2f& p1, const sf::Vector2f& p2)
+{
+	return Magnitude(p2 - p1);
+}
+
+float Utils::RadianToDegree(float radian)
+{
+	return radian / M_PI * 180.f;
+}
+
+float Utils::DegreeToRadian(float degree)
+{
+	return degree / 180 * M_PI;
+}
+
+float Utils::Angle(const sf::Vector2f& vec)
+{
+	return RadianToDegree(atan2f(vec.y, vec.x));
+}
+
+void Utils::Rotate(sf::Vector2f& vec, float degree)
+{
+	vec = GetNormalize(sf::Transform().rotate(degree) * vec);
+}
+
+void Utils::ElasticCollision(float& coord, float border, float cor)
+{
+	coord = border - (coord - border) * cor;
+}
+
+float Utils::GetElasticCollision(float coord, float border, float cor)
+{
+	return border - (coord - border) * cor;
 }

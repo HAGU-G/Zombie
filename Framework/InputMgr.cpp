@@ -14,11 +14,11 @@ void InputMgr::Init()
     infoH.axis = Axis::Horizontal;
     infoH.positives.push_back(sf::Keyboard::D);
     infoH.positives.push_back(sf::Keyboard::Right);
-    infoH.positives.push_back(MouseButtonToKey(sf::Mouse::Button::Right));
+    //infoH.positives.push_back(MouseButtonToKey(sf::Mouse::Button::Right));
 
     infoH.negatives.push_back(sf::Keyboard::A);
     infoH.negatives.push_back(sf::Keyboard::Left);
-    infoH.negatives.push_back(MouseButtonToKey(sf::Mouse::Button::Left));
+    //infoH.negatives.push_back(MouseButtonToKey(sf::Mouse::Button::Left));
 
     infoH.sensi = 8.f;
     infoH.value = 0.f;
