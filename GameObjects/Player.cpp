@@ -9,7 +9,7 @@ Player::Player(const std::string& name) : SpriteGo(name)
 void Player::Init()
 {
 	SpriteGo::Init();
-	SetTexture("graphics/player.png");
+	SetTexture(textureId);
 	SetOrigin(Origins::MC);
 }
 
