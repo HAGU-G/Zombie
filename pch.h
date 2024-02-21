@@ -8,6 +8,7 @@
 #include <iostream>
 #include <vector>
 #include <list>
+#include <deque>
 #include <unordered_map>
 #include <cmath>
 

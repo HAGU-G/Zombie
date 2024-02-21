@@ -25,5 +25,7 @@ public:
 	void Draw(sf::RenderWindow& window) override;
 	void Reset() override;
 
+
+	inline const sf::FloatRect& GetLocalBounds() const { return sprite.getLocalBounds(); }
 };
 

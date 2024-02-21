@@ -36,7 +36,7 @@ public:
 	virtual void Release();
 
 	virtual void Enter();
-	virtual void Exit() {};
+	virtual void Exit();
 
 	virtual void Update(float dt);
 	virtual void Draw(sf::RenderWindow& window);

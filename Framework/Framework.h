@@ -26,6 +26,8 @@ protected:
 	sf::Time realDeltaTime;
 	sf::Time deltaTime;
 
+	bool isFocus = true;
+
 public:
 	sf::RenderWindow& GetWindow() { return window; }	// !!
 	const sf::Vector2i& GetWindowSize() const { return windowSize; }

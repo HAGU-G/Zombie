@@ -19,7 +19,7 @@ void Framework::Do()
     while (window.isOpen())
     {
         deltaTime = realDeltaTime = clock.restart();
-        deltaTime *= timeScale;
+        deltaTime *= timeScale * isFocus;
 
         time += deltaTime;
         realTime += realDeltaTime;
@@ -30,7 +30,6 @@ void Framework::Do()
         {
             if (event.type == sf::Event::Closed)
                 window.close();
-
             InputMgr::UpdateEvent(event);
         }
         InputMgr::Update(GetDT());

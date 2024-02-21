@@ -68,6 +68,10 @@ void Scene::Enter()
 	}
 }
 
+void Scene::Exit()
+{
+}
+
 void Scene::Update(float dt)
 {
 	for (auto obj : gameObjects)
@@ -85,6 +89,7 @@ void Scene::Update(float dt)
 		}
 	}
 }
+
 
 void Scene::Draw(sf::RenderWindow& window)
 {

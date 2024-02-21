@@ -24,12 +24,14 @@ protected:
 	int maxHp;
 	float speed;
 
-	int currenHp;
+	int currentHp;
 	int aktDamage;
 
 	Player* player;
+	float distanceToPlayer;
 
 	Zombie(const std::string& name="");
+
 
 public:
 	~Zombie() = default;
@@ -40,6 +42,7 @@ public:
 	void Reset() override;
 	void Update(float dt) override;
 	void Draw(sf::RenderWindow& window) override;
+	inline float GetDistanceToPlayer() const { return distanceToPlayer; }
 
 };
 

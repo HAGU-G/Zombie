@@ -59,39 +59,60 @@ void SceneGame::Update(float dt)
 {
 	Scene::Update(dt);
 	TileMap* tileMap = dynamic_cast<TileMap*>(FindGo("Background"));
-	
+
 	sf::Vector2f speed = player->GetPosition() - worldView.getCenter();
 	worldView.move(speed * dt * 2.f);
-	if (Utils::Distance(player->GetPosition(),worldView.getCenter()) <= 1.f && InputMgr::GetAxis(Axis::Horizontal)==0.f&& InputMgr::GetAxis(Axis::Vertical) == 0.f)
+	if (Utils::Distance(player->GetPosition(), worldView.getCenter()) <= 1.f && InputMgr::GetAxis(Axis::Horizontal) == 0.f && InputMgr::GetAxis(Axis::Vertical) == 0.f)
 		worldView.setCenter(player->GetPosition());
 
+	//추가
 	if (InputMgr::GetKey(sf::Keyboard::Space))
 	{
 		AddZombie();
 	}
-	if (InputMgr::GetKey(sf::Keyboard::Delete))
+	//전부 제거
+	if (InputMgr::GetKeyDown(sf::Keyboard::Delete))
 	{
-		for (size_t i = 0; i < zombieObjects.size();i++)
+		while (zombieObjects.size() > 0)
 		{
 			Zombie* temp = zombieObjects.front();
 			RemoveGo(temp);
 			zombieObjects.pop_front();
 			delete temp;
 		}
-
 	}
+	//하나씩 랜덤하게 제거
 	if (InputMgr::GetKey(sf::Keyboard::BackSpace))
 	{
-		for (size_t i = 0; i < zombieObjects.size(); i++)
+		size_t siz = zombieObjects.size();
+		if (siz != 0)
 		{
-			Zombie* temp = zombieObjects.front();
-			RemoveGo(temp);
-			zombieObjects.pop_front();
-			delete temp;
+			int t = rand() % siz;
+			auto it = zombieObjects.begin();
+			for (int i = 0; i < t; i++)
+			{
+				it++;
+			}
+			RemoveGo(*it);
+			Zombie* z = *it;
+			zombieObjects.remove(*it);
+			delete z;
 		}
-
 	}
 
+	PostUpdate(dt);
+}
+
+void SceneGame::PostUpdate(float dt)
+{
+	while (deleteDeque.size() > 0)
+	{
+		GameObject* temp = deleteDeque.front();
+		RemoveGo(temp);
+		deleteDeque.pop_front();
+		zombieObjects.remove(dynamic_cast<Zombie*>(temp));
+		delete temp;
+	}
 }
 
 void SceneGame::Draw(sf::RenderWindow& window)
@@ -108,4 +129,10 @@ Zombie* SceneGame::AddZombie()
 	AddGo(z);
 	zombieObjects.push_back(z);
 	return z;
+}
+
+
+void SceneGame::DeleteGo(GameObject* obj)
+{
+	deleteDeque.push_back(obj);
 }

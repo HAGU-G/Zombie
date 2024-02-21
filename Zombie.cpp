@@ -62,20 +62,30 @@ void Zombie::Reset()
 void Zombie::Update(float dt)
 {
 	SpriteGo::Update(dt);
-	SetPosition(GetPosition() + Utils::GetNormalize(player->GetPosition() - GetPosition()) * speed * dt);
 
-
-	for(auto ptr :dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrentScene())->zombieObjects)
+	//플레이어에게 이동
+	if (distanceToPlayer > speed * dt)
+		SetPosition(GetPosition() + Utils::GetNormalize(player->GetPosition() - GetPosition()) * speed * dt);
+	//좀비끼리 충돌 검사
+	for (auto ptr : dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrentScene())->zombieObjects)
 	{
 		if (ptr == this)
 			continue;
-		if(Utils::Distance(ptr->GetPosition(), GetPosition()) <= 20.f)
-		SetPosition(GetPosition() - Utils::GetNormalize(ptr->GetPosition() - GetPosition()) * speed * dt);
+		float distance = Utils::Distance(ptr->GetPosition(), GetPosition());
+		float minDistance = sprite.getLocalBounds().width / 3 + ptr->GetLocalBounds().width / 3;
+		if (distance < minDistance && distanceToPlayer > ptr->GetDistanceToPlayer())
+		{
+			SetPosition(GetPosition() - (minDistance - distance) * Utils::GetNormalize(ptr->GetPosition() - GetPosition()));
+		}
 	}
+
 	rotation = Utils::Angle(player->GetPosition() - GetPosition());
 	SetRotation(rotation);
-
-
+	distanceToPlayer = Utils::Distance(player->GetPosition(), GetPosition());
+	if (distanceToPlayer < sprite.getLocalBounds().width / 3 + player->GetLocalBounds().width / 3)
+	{
+		dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrentScene())->DeleteGo(this);
+	}
 }
 
 void Zombie::Draw(sf::RenderWindow& window)
