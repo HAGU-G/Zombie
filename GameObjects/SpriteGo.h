@@ -13,9 +13,12 @@ public:
 	void SetTexture();
 
 	void SetPosition(const sf::Vector2f& pos) override;
+	void Translate(const sf::Vector2f& pos) override;
+
 	void SetOrigin(Origins preset) override;
 	void SetOrigin(const sf::Vector2f& newOrigin) override;
 	void SetScale(const sf::Vector2f& scale) override;
+	void SetRotation(float r) override;
 	void SetFlipX(bool filp) override;
 	void SetFlipY(bool filp) override;
 

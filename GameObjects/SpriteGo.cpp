@@ -23,6 +23,12 @@ void SpriteGo::SetPosition(const sf::Vector2f& pos)
 	sprite.setPosition(pos);
 }
 
+void SpriteGo::Translate(const sf::Vector2f& delta)
+{
+	position += delta;
+	sprite.setPosition(position);
+}
+
 void SpriteGo::SetOrigin(Origins preset)
 {
 	if (preset == Origins::Custom)
@@ -52,6 +58,12 @@ void SpriteGo::SetScale(const sf::Vector2f& s)
 		spriteScale.y = -scale.y;
 	}
 	sprite.setScale(spriteScale);
+}
+
+void SpriteGo::SetRotation(float r)
+{
+	rotation = r;
+	sprite.setRotation(rotation);
 }
 
 void SpriteGo::SetFlipX(bool filp)

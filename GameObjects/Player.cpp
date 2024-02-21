@@ -31,7 +31,7 @@ void Player::Update(float dt)
 	sf::Vector2f mouseWorldPos = InputMgr::GetMousePos();
 	float lookAngle = Utils::Angle(mouseWorldPos - GetPosition());
 	Utils::Rotate(look, lookAngle);
-	sprite.setRotation(lookAngle);
+	SetRotation(lookAngle);
 
 	//캐릭터 이동
 	direction.x = InputMgr::GetAxis(Axis::Horizontal);

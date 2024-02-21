@@ -39,6 +39,11 @@ void TextGo::SetPosition(const sf::Vector2f& pos)
 	text.setPosition(position);
 }
 
+void TextGo::Translate(const sf::Vector2f& delta)
+{
+	position += delta;
+}
+
 void TextGo::SetOrigin(Origins preset)
 {
 	if (preset == Origins::Custom)
@@ -68,6 +73,12 @@ void TextGo::SetScale(const sf::Vector2f& s)
 		spriteScale.y = -scale.y;
 	}
 	text.setScale(spriteScale);
+}
+
+void TextGo::SetRotation(float r)
+{
+	rotation = r;
+	text.setRotation(r);
 }
 
 void TextGo::SetFlipX(bool filp)

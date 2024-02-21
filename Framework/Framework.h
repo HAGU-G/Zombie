@@ -1,5 +1,6 @@
 #pragma once
 #include "Singleton.h"
+#include "RenderWindowRBR.h"
 
 // 1. 초기화 / 메인루프 / 정리
 // 2. 시간 관련 기능 / 윈도우 정보
