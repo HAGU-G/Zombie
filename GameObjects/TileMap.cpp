@@ -54,7 +54,7 @@ void TileMap::Set(const sf::Vector2i& count, const sf::Vector2f& size)
 			{
 				int vertexIndex = (quadIndex * 4) + k;
 				va[vertexIndex].position = quadPos + posOffsets[k];
-				va[vertexIndex].texCoords = sf::Vector2f(0, texIndex * 50.f) + posOffsets[k];
+				va[vertexIndex].texCoords = sf::Vector2f(0, texIndex * size.y) + posOffsets[k];
 			}
 		}
 	}

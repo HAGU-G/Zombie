@@ -3,11 +3,13 @@
 
 void RenderWindowRBR::onCreate()
 {
+	RenderWindow::onCreate();
 	preSize = sizeRatio = getSize();
 }
 
 void RenderWindowRBR::onResize()
 {
+	RenderWindow::onResize();
 	if (isResizing)
 		return;
 
@@ -32,5 +34,4 @@ void RenderWindowRBR::onResize()
 	preSize = getSize();
 
 	isResizing = false;
-	RenderWindow::onResize();
 }

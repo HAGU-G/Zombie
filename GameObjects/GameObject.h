@@ -8,57 +8,50 @@ protected:
 	Origins originPreset = Origins::TL;
 	sf::Vector2f origin = { 0.f, 0.f };
 	sf::Vector2f position = { 0.f, 0.f };
-	float rotation = 0.f;
 	sf::Vector2f scale = { 1.f, 1.f };
+	float rotation = 0.f;
 	
-
 	bool isFlipX = false;
 	bool isFlipY = false;
 
 public:
+	std::string name = "";
+	int sortLayer = 0;
+	int sortOrder = 0;
+
 	GameObject(const std::string& name = "");
 	virtual ~GameObject();
 
-	bool GetActive() const { return active; }
 	virtual void SetActive(bool active) { this->active = active; }
 
-	sf::Vector2f GetOrigin() const { return origin; }
-
 	virtual void SetOrigin(Origins preset);
-	virtual void SetOrigin(const sf::Vector2f& newOrigin)
+	virtual inline void SetOrigin(const sf::Vector2f& newOrigin)
 	{
 		originPreset = Origins::Custom;
 		origin = newOrigin;
 	}
-
-	sf::Vector2f GetPosition() const { return position; }
 	virtual void SetPosition(const sf::Vector2f& pos) { position = pos; }
-	virtual void Translate(const sf::Vector2f& delta) { position += delta; }
 
-
-
-	sf::Vector2f GetScale() const { return scale; }
 	virtual void SetScale(const sf::Vector2f& scale);
-
-	float GetRotation() const { return rotation; }
-	virtual void SetRotation(float r) { rotation = r; }
-
-	bool GetFlipX() const { return isFlipX; }
 	virtual void SetFlipX(bool flip) {  isFlipX = flip ; }
-
-	bool GetFlipY() const { return isFlipY; }
 	virtual void SetFlipY(bool flip) { isFlipY = flip; }
+	virtual void SetRotation(float r) { rotation = r; }
+	virtual void Translate(const sf::Vector2f& delta) { position += delta; }
 
 	virtual void Init();
 	virtual void Release();
-
 	virtual void Reset();
-
 	virtual void Update(float dt);
 	virtual void Draw(sf::RenderWindow& window);
 
-	std::string name = "";
-	int sortLayer = 0;
-	int sortOrder = 0;
+	bool GetActive() const { return active; }
+
+	sf::Vector2f GetOrigin() const { return origin; }
+	sf::Vector2f GetPosition() const { return position; }
+
+	sf::Vector2f GetScale() const { return scale; }
+	bool GetFlipX() const { return isFlipX; }
+	bool GetFlipY() const { return isFlipY; }
+	float GetRotation() const { return rotation; }
 };
 

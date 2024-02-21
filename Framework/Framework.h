@@ -14,8 +14,8 @@ protected:
 	Framework() = default;
 	virtual ~Framework() = default;
 
-	sf::RenderWindow window;
 	sf::Vector2i windowSize;
+	RenderWindowRBR window;
 
 	sf::Clock clock;
 	float timeScale = 1.f;

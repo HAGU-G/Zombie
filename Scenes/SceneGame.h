@@ -1,11 +1,13 @@
 #pragma once
 #include "Scene.h"
+#include "Zombie.h"
 
 class Player;
 class SceneGame : public Scene
 {
 protected:
 	Player* player;
+
 
 public:
 	SceneGame(SceneIds id);
@@ -19,5 +21,9 @@ public:
 
 	void Update(float dt) override;
 	void Draw(sf::RenderWindow& window) override;
+
+
+	std::list<Zombie*> zombieObjects;
+	Zombie* AddZombie();
 };
 

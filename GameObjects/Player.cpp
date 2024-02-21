@@ -28,7 +28,11 @@ void Player::Update(float dt)
 	SpriteGo::Update(dt);
 
 	//캐릭터 회전
-	sf::Vector2f mouseWorldPos = InputMgr::GetMousePos();
+	sf::Vector2i mousePos = (sf::Vector2i)InputMgr::GetMousePos();
+	sf::Vector2f mouseWorldPos = SCENE_MGR.GetCurrentScene()->ScreenToWorld(mousePos);
+
+
+	//sf::Vector2f mouseWorldPos = InputMgr::GetMousePos() + SCENE_MGR.GetCurrentScene()->GetViewCenter() - sf::Vector2f(FRAMEWORK.GetWindow().getSize()) * 0.5f;
 	float lookAngle = Utils::Angle(mouseWorldPos - GetPosition());
 	Utils::Rotate(look, lookAngle);
 	SetRotation(lookAngle);
