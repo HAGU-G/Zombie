@@ -23,13 +23,13 @@ public:
 	GameObject(const std::string& name = "");
 	virtual ~GameObject();
 
-	static bool CompaterDrawOrder(const GameObject* lhs, const GameObject* rhs)
+	static bool CompareDrawOrder(const GameObject* lhs, const GameObject* rhs)
 	{
 		if (lhs->sortLayer != rhs->sortLayer)
 			return lhs->sortLayer < rhs->sortLayer;
 		return lhs->sortOrder < rhs->sortOrder;
 	}
-	static bool CompaterDrawOrder(const GameObject& lhs, const GameObject& rhs)
+	static bool CompareeDrawOrder(const GameObject& lhs, const GameObject& rhs)
 	{
 		if (lhs.sortLayer != rhs.sortLayer)
 			return lhs.sortLayer < rhs.sortLayer;

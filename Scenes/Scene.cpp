@@ -88,28 +88,33 @@ void Scene::Update(float dt)
 			obj->Update(dt);
 		}
 	}
+
+
+
+
+	for (auto obj : sortList)
+	{
+		auto it = std::find(gameObjects.begin(), gameObjects.end(), obj);
+		if (it != gameObjects.end())
+		{
+			gameObjects.remove(obj);
+			AddGo(obj, Layers::World);
+			continue;
+		}
+		auto it2 = std::find(uiObjects.begin(), uiObjects.end(), obj);
+		if (it2 != uiObjects.end())
+		{
+			uiObjects.remove(obj);
+			AddGo(obj, Layers::Ui);
+			continue;
+		}
+	}
+	sortList.clear();
 }
 
 
 void Scene::Draw(sf::RenderWindow& window)
 {
-	gameObjects.sort(
-		[](const GameObject* a, const GameObject* b) {
-			if (a->sortLayer != b->sortLayer)
-			{
-				return a->sortLayer < b->sortLayer;
-			}
-			return a->sortOrder < b->sortOrder;
-		});
-	uiObjects.sort(
-		[](const GameObject* a, const GameObject* b) {
-		if (a->sortLayer != b->sortLayer)
-		{
-			return a->sortLayer < b->sortLayer;
-		}
-		return a->sortOrder < b->sortOrder;
-		});
-
 	const sf::View& saveView = window.getView();
 	window.setView(worldView);
 	for (auto obj : gameObjects)
@@ -181,17 +186,39 @@ int Scene::FindGoAll(const std::string& name, std::list<GameObject*>& list, Laye
 
 GameObject* Scene::AddGo(GameObject* obj, Layers layer)
 {
-	if (layer == Layers::World) {
+	if (layer == Layers::World)
+	{
 		if (std::find(gameObjects.begin(), gameObjects.end(), obj) == gameObjects.end())
 		{
+			auto it = gameObjects.begin();
+			while (it != gameObjects.end())
+			{
+				if (GameObject::CompareDrawOrder(obj, *it))
+				{
+					gameObjects.insert(it, obj);
+					return obj;
+				}
+				++it;
+			}
 			gameObjects.push_back(obj);
 			return obj;
 		}
 	}
-	if (layer == Layers::Ui) {
+	if (layer == Layers::Ui)
+	{
 		if (std::find(uiObjects.begin(), uiObjects.end(), obj) == uiObjects.end())
 		{
-			gameObjects.push_back(obj);
+			auto it = uiObjects.begin();
+			while (it != uiObjects.end())
+			{
+				if (GameObject::CompareDrawOrder(obj, *it))
+				{
+					uiObjects.insert(it, obj);
+					return obj;
+				}
+				++it;
+			}
+			uiObjects.push_back(obj);
 			return obj;
 		}
 	}
@@ -209,4 +236,9 @@ void Scene::RemoveGo(GameObject* obj)
 void Scene::DeleteGo(GameObject* obj)
 {
 	deleteDeque.push_back(obj);
+}
+
+void Scene::ReSoltGo(GameObject* obj)
+{
+	sortList.push_back(obj);
 }

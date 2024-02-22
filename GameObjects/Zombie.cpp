@@ -35,7 +35,7 @@ Zombie* Zombie::Create(Types zombieType)
 	default:
 		break;
 	}
-
+	zombie->maxSpeed = zombie->speed;
 	return zombie;
 }
 
@@ -77,7 +77,7 @@ void Zombie::Update(float dt)
 		float minDistance = sprite.getLocalBounds().width / 3 + ptr->GetLocalBounds().width / 3;
 		if (distance < minDistance && distanceToPlayer > ptr->GetDistanceToPlayer())
 		{
-			SetPosition(GetPosition() - (minDistance - distance)*dt * Utils::GetNormalize(ptr->GetPosition() - GetPosition()));
+			SetPosition(GetPosition() - (minDistance - distance) * Utils::GetNormalize(ptr->GetPosition() - GetPosition()));
 		}
 	}
 

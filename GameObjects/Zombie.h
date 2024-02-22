@@ -22,6 +22,7 @@ protected:
 	
 	int maxHp = 1;
 	float speed = 1;
+	float maxSpeed = 1;
 
 	int currentHp = 1;
 	int aktDamage = 1;

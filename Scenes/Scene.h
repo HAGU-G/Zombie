@@ -9,6 +9,7 @@ protected:
 	std::list<GameObject*> gameObjects;
 	std::list<GameObject*> uiObjects;
 	std::deque<GameObject*> deleteDeque;
+	std::list<GameObject*> sortList;
 
 	sf::View worldView;
 	sf::View uiView;
@@ -50,6 +51,7 @@ public:
 
 	virtual void RemoveGo(GameObject* obj);
 	virtual void DeleteGo(GameObject* obj);
+	virtual void ReSoltGo(GameObject* obj);
 
 	const sf::Vector2f& GetViewCenter()
 	{

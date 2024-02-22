@@ -85,6 +85,8 @@ void SceneGame::Update(float dt)
 	if (InputMgr::GetKeyDown(sf::Keyboard::Enter))
 	{
 		AddZombie(Zombie::Types(rand() % (int)Zombie::Types::Count));
+		tileMap->sortLayer = 50;
+		ReSoltGo(tileMap);
 	}
 	//전부 제거
 	if (InputMgr::GetKeyDown(sf::Keyboard::Delete))
