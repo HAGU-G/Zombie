@@ -1,6 +1,7 @@
 #pragma once
 #include "Scene.h"
 #include "Zombie.h"
+#include "Item.h"
 
 
 class ZombieSpawner;
@@ -41,6 +42,8 @@ public:
 
 	std::list<Bullet*> bullets;
 	Bullet* CreateBullet(Player* player);
+
+	Item* CreateItem(Item::Types itemType);
 
 };
 

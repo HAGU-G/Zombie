@@ -6,6 +6,7 @@
 #include "ZombieSpawner.h"
 #include "Bullet.h"
 #include "Crosshair.h"
+#include "Item.h"
 
 SceneGame::SceneGame(SceneIds id)
 	:Scene(id)
@@ -73,8 +74,6 @@ void SceneGame::Enter()
 	FRAMEWORK.GetWindow().setMouseCursorVisible(false);
 	Scene::Enter();
 
-	srand(time(NULL));
-
 	sf::Vector2f windowSize = (sf::Vector2f)FRAMEWORK.GetWindowSize();
 	sf::Vector2f centerPos = windowSize * 0.5f;
 	worldView.setSize(windowSize);
@@ -113,6 +112,7 @@ void SceneGame::Update(float dt)
 	if (InputMgr::GetKey(sf::Keyboard::Space))
 	{
 		CreateZombie(Zombie::Types(rand() % (int)Zombie::Types::Count));
+		CreateItem(Item::Types::HEAL)->SetPosition({ 500,500 });
 	}
 	if (InputMgr::GetKeyDown(sf::Keyboard::Enter))
 	{
@@ -214,7 +214,14 @@ Bullet* SceneGame::CreateBullet(Player* player)
 	return b;
 }
 
-
+Item* SceneGame::CreateItem(Item::Types itemType)
+{
+	Item* i = Item::Create(Item::Types::HEAL);
+	i->Init();
+	i->Reset();
+	AddGo(i);
+	return i;
+}
 
 void SceneGame::BulletCollision()
 {

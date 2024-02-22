@@ -2,6 +2,7 @@
 #include "Zombie.h"
 #include "SceneGame.h"
 #include "Bullet.h"
+#include <EffectBlood.h>
 
 Zombie::Zombie(const std::string& name)
 	: SpriteGo(name)
@@ -155,6 +156,7 @@ void Zombie::Damaged(int damage)
 	if (hp <= 0)
 	{
 		isDead = true;
+		SCENE_MGR.GetCurrentScene()->AddGo(new EffectBlood(this->position))->Init();
 		SCENE_MGR.GetCurrentScene()->DeleteGo(this);
 	}
 
