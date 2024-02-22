@@ -4,6 +4,7 @@
 Player::Player(const std::string& name) : SpriteGo(name)
 {
 	textureId = "graphics/player.png";
+	sortLayer = 5;
 }
 
 void Player::Init()

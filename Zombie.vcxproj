@@ -146,6 +146,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="GameObjects\GameObject.cpp" />
+    <ClCompile Include="GameObjects\ZombieSpawner.cpp" />
     <ClCompile Include="main.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
@@ -161,7 +162,7 @@
     <ClCompile Include="GameObjects\SpriteGo.cpp" />
     <ClCompile Include="GameObjects\TextGo.cpp" />
     <ClCompile Include="GameObjects\TileMap.cpp" />
-    <ClCompile Include="Zombie.cpp" />
+    <ClCompile Include="GameObjects\Zombie.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Framework\Framework.h" />
@@ -182,7 +183,8 @@
     <ClInclude Include="GameObjects\SpriteGo.h" />
     <ClInclude Include="GameObjects\TextGo.h" />
     <ClInclude Include="GameObjects\TileMap.h" />
-    <ClInclude Include="Zombie.h" />
+    <ClInclude Include="GameObjects\Zombie.h" />
+    <ClInclude Include="GameObjects\ZombieSpawner.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

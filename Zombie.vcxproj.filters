@@ -63,7 +63,10 @@
     <ClCompile Include="Framework\RenderWindowRBR.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Zombie.cpp">
+    <ClCompile Include="GameObjects\Zombie.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjects\ZombieSpawner.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -122,7 +125,10 @@
     <ClInclude Include="Framework\RenderWindowRBR.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Zombie.h">
+    <ClInclude Include="GameObjects\Zombie.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjects\ZombieSpawner.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

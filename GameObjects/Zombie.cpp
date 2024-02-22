@@ -5,15 +5,14 @@
 Zombie::Zombie(const std::string& name)
 	: SpriteGo(name)
 {
+	tag = 0;
+	sortLayer = 10;
 }
 
-Zombie* Zombie::Create(Types zombieType, Player* player)
+Zombie* Zombie::Create(Types zombieType)
 {
 	Zombie* zombie = new Zombie();
-	zombie->player = player;
 	zombie->type = zombieType;
-	zombie->SetPosition(Utils::RandomOnUnitCircle() * Utils::RandomRange(500.f, 2000.f) + player->GetPosition());
-
 
 
 	switch (zombieType)
@@ -62,10 +61,13 @@ void Zombie::Reset()
 void Zombie::Update(float dt)
 {
 	SpriteGo::Update(dt);
+	direction = player->GetPosition() - position;
+	Utils::Normalize(direction);
 
 	//플레이어에게 이동
 	if (distanceToPlayer > speed * dt)
-		SetPosition(GetPosition() + Utils::GetNormalize(player->GetPosition() - GetPosition()) * speed * dt);
+		//SetPosition(GetPosition() + Utils::GetNormalize(player->GetPosition() - GetPosition()) * speed * dt);
+		Translate(direction * speed * dt);
 	//좀비끼리 충돌 검사
 	for (auto ptr : dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrentScene())->zombieObjects)
 	{
@@ -75,16 +77,19 @@ void Zombie::Update(float dt)
 		float minDistance = sprite.getLocalBounds().width / 3 + ptr->GetLocalBounds().width / 3;
 		if (distance < minDistance && distanceToPlayer > ptr->GetDistanceToPlayer())
 		{
-			SetPosition(GetPosition() - (minDistance - distance) * Utils::GetNormalize(ptr->GetPosition() - GetPosition()));
+			SetPosition(GetPosition() - (minDistance - distance)*dt * Utils::GetNormalize(ptr->GetPosition() - GetPosition()));
 		}
 	}
+
 
 	rotation = Utils::Angle(player->GetPosition() - GetPosition());
 	SetRotation(rotation);
 	distanceToPlayer = Utils::Distance(player->GetPosition(), GetPosition());
+
+	//삭제
 	if (distanceToPlayer < sprite.getLocalBounds().width / 3 + player->GetLocalBounds().width / 3)
 	{
-		dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrentScene())->DeleteGo(this);
+		//dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrentScene())->DeleteGo(this);
 	}
 }
 

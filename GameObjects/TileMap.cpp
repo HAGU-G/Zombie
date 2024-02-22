@@ -4,6 +4,7 @@
 TileMap::TileMap(const std::string& name)
 	:GameObject(name)
 {
+	sortLayer = -1;
 }
 
 void TileMap::SetSpriteSheetId(const std::string& id)

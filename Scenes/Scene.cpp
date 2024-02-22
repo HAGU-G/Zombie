@@ -93,6 +93,23 @@ void Scene::Update(float dt)
 
 void Scene::Draw(sf::RenderWindow& window)
 {
+	gameObjects.sort(
+		[](const GameObject* a, const GameObject* b) {
+			if (a->sortLayer != b->sortLayer)
+			{
+				return a->sortLayer < b->sortLayer;
+			}
+			return a->sortOrder < b->sortOrder;
+		});
+	uiObjects.sort(
+		[](const GameObject* a, const GameObject* b) {
+		if (a->sortLayer != b->sortLayer)
+		{
+			return a->sortLayer < b->sortLayer;
+		}
+		return a->sortOrder < b->sortOrder;
+		});
+
 	const sf::View& saveView = window.getView();
 	window.setView(worldView);
 	for (auto obj : gameObjects)
@@ -186,4 +203,10 @@ void Scene::RemoveGo(GameObject* obj)
 {
 	gameObjects.remove(obj);
 	uiObjects.remove(obj);
+}
+
+
+void Scene::DeleteGo(GameObject* obj)
+{
+	deleteDeque.push_back(obj);
 }

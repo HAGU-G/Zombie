@@ -4,6 +4,7 @@ class GameObject
 {
 protected:
 	bool active = true;
+	int tag = -1;
 
 	Origins originPreset = Origins::TL;
 	sf::Vector2f origin = { 0.f, 0.f };
@@ -21,6 +22,26 @@ public:
 
 	GameObject(const std::string& name = "");
 	virtual ~GameObject();
+
+	static bool CompaterDrawOrder(const GameObject* lhs, const GameObject* rhs)
+	{
+		if (lhs->sortLayer != rhs->sortLayer)
+			return lhs->sortLayer < rhs->sortLayer;
+		return lhs->sortOrder < rhs->sortOrder;
+	}
+	static bool CompaterDrawOrder(const GameObject& lhs, const GameObject& rhs)
+	{
+		if (lhs.sortLayer != rhs.sortLayer)
+			return lhs.sortLayer < rhs.sortLayer;
+		return lhs.sortOrder < rhs.sortOrder;
+	}
+
+	inline bool operator<(const GameObject& rhs)
+	{
+		if (sortLayer != rhs.sortLayer)
+			return sortLayer < rhs.sortLayer;
+		return sortOrder < rhs.sortOrder;
+	}
 
 	virtual void SetActive(bool active) { this->active = active; }
 
@@ -53,5 +74,7 @@ public:
 	bool GetFlipX() const { return isFlipX; }
 	bool GetFlipY() const { return isFlipY; }
 	float GetRotation() const { return rotation; }
+	int GetTag() const { return tag; }
+
 };
 

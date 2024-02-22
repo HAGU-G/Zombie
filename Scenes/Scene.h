@@ -8,6 +8,7 @@ protected:
 	SceneIds id;
 	std::list<GameObject*> gameObjects;
 	std::list<GameObject*> uiObjects;
+	std::deque<GameObject*> deleteDeque;
 
 	sf::View worldView;
 	sf::View uiView;
@@ -48,6 +49,7 @@ public:
 
 
 	virtual void RemoveGo(GameObject* obj);
+	virtual void DeleteGo(GameObject* obj);
 
 	const sf::Vector2f& GetViewCenter()
 	{

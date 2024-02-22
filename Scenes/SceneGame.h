@@ -2,12 +2,14 @@
 #include "Scene.h"
 #include "Zombie.h"
 
+
+class ZombieSpawner;
 class Player;
 class SceneGame : public Scene
 {
 protected:
 	Player* player;
-	std::deque<GameObject*> deleteDeque;
+	std::vector<ZombieSpawner*> spawners;
 
 public:
 	SceneGame(SceneIds id);
@@ -23,9 +25,10 @@ public:
 	void PostUpdate(float dt);
 
 	void Draw(sf::RenderWindow& window) override;
-	void DeleteGo(GameObject* obj);
+
+	inline Player* GetPlayer() { return player; }
 
 	std::list<Zombie*> zombieObjects;
-	Zombie* AddZombie();
+	Zombie* AddZombie(Zombie::Types zombieType);
 };
 

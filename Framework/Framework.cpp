@@ -3,6 +3,7 @@
 
 void Framework::Init(int width, int height, const std::string& name)
 {
+    window.setFramerateLimit(30);
     srand(std::time(NULL));
 
     windowSize.x = width;

@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "TileMap.h"
 #include "Zombie.h"
+#include "ZombieSpawner.h"
 
 SceneGame::SceneGame(SceneIds id)
 	:Scene(id)
@@ -11,11 +12,22 @@ SceneGame::SceneGame(SceneIds id)
 
 void SceneGame::Init()
 {
-	AddGo(new TileMap("Background"));
+	//배경
+	
+	//좀비 스포너
+	spawners.push_back(new ZombieSpawner());
+	spawners.push_back(new ZombieSpawner());
+	for (auto s : spawners)
+	{
+		s->SetPosition(Utils::RandomOnUnitCircle()*250.f);
+		AddGo(s);
+	}
 
+	//플레이어
 	player = new Player("Player");
 	AddGo(player);
 
+	AddGo(new TileMap("Background"));
 	Scene::Init();
 }
 
@@ -68,7 +80,11 @@ void SceneGame::Update(float dt)
 	//추가
 	if (InputMgr::GetKey(sf::Keyboard::Space))
 	{
-		AddZombie();
+		AddZombie(Zombie::Types(rand() % (int)Zombie::Types::Count));
+	}
+	if (InputMgr::GetKeyDown(sf::Keyboard::Enter))
+	{
+		AddZombie(Zombie::Types(rand() % (int)Zombie::Types::Count));
 	}
 	//전부 제거
 	if (InputMgr::GetKeyDown(sf::Keyboard::Delete))
@@ -110,7 +126,8 @@ void SceneGame::PostUpdate(float dt)
 		GameObject* temp = deleteDeque.front();
 		RemoveGo(temp);
 		deleteDeque.pop_front();
-		zombieObjects.remove(dynamic_cast<Zombie*>(temp));
+		if(temp->GetTag() == 0)
+			zombieObjects.remove(dynamic_cast<Zombie*>(temp));
 		delete temp;
 	}
 }
@@ -121,18 +138,13 @@ void SceneGame::Draw(sf::RenderWindow& window)
 }
 
 
-Zombie* SceneGame::AddZombie()
+Zombie* SceneGame::AddZombie(Zombie::Types zombieType)
 {
-	Zombie* z = Zombie::Create(Zombie::Types(rand() % 3), player);
+	Zombie* z = Zombie::Create(zombieType);
 	z->Init();
 	z->Reset();
+	z->SetPlayer(player);
 	AddGo(z);
 	zombieObjects.push_back(z);
 	return z;
-}
-
-
-void SceneGame::DeleteGo(GameObject* obj)
-{
-	deleteDeque.push_back(obj);
 }
