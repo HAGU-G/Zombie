@@ -14,6 +14,7 @@ protected:
 	std::vector<ZombieSpawner*> spawners;
 	bool doReset = false;
 	std::pair<sf::Vector2f, sf::Vector2f> boundary;
+	sf::RectangleShape healthBar;
 
 	void BulletCollision();
 

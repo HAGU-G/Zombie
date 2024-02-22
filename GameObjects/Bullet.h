@@ -8,11 +8,11 @@ class Bullet : public GameObject
 protected:
     sf::Vector2f direction;
     float speed;
-    int damage;
     float displacement = 0.f; //움직인 거리
 
 
 public:
+    int damage;
     bool isHit = false;
     sf::Vector2f prePos;
     sf::RectangleShape shape;
@@ -27,7 +27,7 @@ public:
     void Update(float dt) override;
     void Draw(sf::RenderWindow& window) override;
     
-    void Hit(sf::Vector2f hitedObjectPos);
+    void Hit();
 
     static Bullet* Create(Player* player);
 };

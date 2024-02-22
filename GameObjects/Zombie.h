@@ -38,6 +38,7 @@ protected:
 
 	void Collision(float dt);
 
+
 public:
 	bool isDead = false;
 
@@ -53,5 +54,6 @@ public:
 
 
 	inline void SetPlayer(Player* p) { player = p; }
+	void Damaged(int damage);
 };
 

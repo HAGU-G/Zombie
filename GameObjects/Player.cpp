@@ -52,7 +52,7 @@ void Player::Update(float dt)
 
 	//충돌 검사
 	std::pair<sf::Vector2f, sf::Vector2f> boundary= dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrentScene())->GetBoundary();
-	//충돌 검사: 윈도우
+	//충돌 검사: 벽
 	if (tempPos.x < boundary.first.x)
 		Utils::ElasticCollision(tempPos.x, boundary.first.x, 0.f);
 	if (tempPos.x > boundary.second.x)
@@ -74,11 +74,10 @@ void Player::Update(float dt)
 		Shot();
 	}
 
-	//죽음
-	/*if (hp == 0)
+	if (hp == 0)
 	{
 		active = false;
-	}*/
+	}
 }
 
 void Player::Draw(sf::RenderWindow& window)
@@ -88,7 +87,7 @@ void Player::Draw(sf::RenderWindow& window)
 
 void Player::Damaged(int damage)
 {
-		hp = std::max(hp - damage, 0);
+	hp = std::max(hp - damage, 0);
 }
 
 void Player::Shot()

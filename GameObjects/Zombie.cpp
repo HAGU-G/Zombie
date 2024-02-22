@@ -20,25 +20,25 @@ Zombie* Zombie::Create(Types zombieType)
 	{
 	case Zombie::Types::Bloater:
 		zombie->textureId = "graphics/bloater.png";
-		zombie->maxHp = zombie->hp = 300;
+		zombie->maxHp = zombie->hp = 141;
 		zombie->maxSpeed = zombie->speed = 30;
 		zombie->atkDamage = 70;
-		zombie->atkInterval = zombie->atkTimer = 2.f;
+		zombie->atkInterval = zombie->atkTimer = 1.f;
 		break;
 	case Zombie::Types::Chaser:
 		zombie->textureId = "graphics/chaser.png";
-		zombie->maxHp = zombie->hp = 100;
+		zombie->maxHp = zombie->hp = 69;
 		zombie->speed = zombie->maxSpeed = 75;
 		zombie->atkDamage = 10;
 		zombie->atkInterval = zombie->atkTimer = 0.5f;
 		break;
 	case Zombie::Types::Crawler:
 		zombie->textureId = "graphics/crawler.png";
-		zombie->maxHp = zombie->hp = 30;
+		zombie->maxHp = zombie->hp = 103;
 		zombie->speed = 0;
-		zombie->maxSpeed = 100;
-		zombie->atkDamage = 100;
-		zombie->atkInterval = zombie->atkTimer = 3.f;
+		zombie->maxSpeed = 200;
+		zombie->atkDamage = 99;
+		zombie->atkInterval = zombie->atkTimer = 2.f;
 		break;
 	default:
 		break;
@@ -75,25 +75,35 @@ void Zombie::Update(float dt)
 	direction = player->GetPosition() - position;
 	Utils::Normalize(direction);
 
+	//기어다니는 친구
 	if (type == Types::Crawler)
 	{
-		speed += maxSpeed * 2 * dt;
+		speed += (speed * 5.f + 1.f) * dt;
 		if (speed > maxSpeed)
-			speed = 0;
+			speed = maxSpeed;
 	}
 
 	//플레이어에게 이동
-	if (distanceToPlayer > sprite.getGlobalBounds().width / 3)
+	if (distanceToPlayer > sprite.getGlobalBounds().width * 3.8f / 10.f)
+	{
 		//SetPosition(GetPosition() + Utils::GetNormalize(player->GetPosition() - GetPosition()) * speed * dt);
 		Translate(direction * speed * dt);
+		if (type == Types::Crawler && speed >= maxSpeed)
+		{
+			speed = 0.f;
+			atkTimer = 0.f;
+		}
+	}
 
 	//충돌 검사
 	Collision(dt);
 
-	//플레이어 공격
-	if (atkTimer >= atkInterval && distanceToPlayer < sprite.getGlobalBounds().width / 3)
+	direction = player->GetPosition() - position;
+
+	if (atkTimer >=atkInterval && distanceToPlayer <= sprite.getGlobalBounds().width * 3.8f / 10.f)
 	{
 		player->Damaged(atkDamage);
+		atkTimer = 0.f;
 	}
 }
 
@@ -102,6 +112,7 @@ void Zombie::Draw(sf::RenderWindow& window)
 	SpriteGo::Draw(window);
 }
 
+//충돌
 void Zombie::Collision(float dt)
 {
 	//좀비
@@ -111,7 +122,7 @@ void Zombie::Collision(float dt)
 			continue;
 		sf::Vector2f dz = Utils::GetNormalize(ptr->GetPosition() - position); //다른 좀비로의 방향
 		float distance = Utils::Distance(ptr->GetPosition(), position); //다른 좀비와의 거리
-		float minDistance = sprite.getGlobalBounds().width / 3.f + ptr->GetLocalBounds().width / 3.f; //최소 거리
+		float minDistance = sprite.getGlobalBounds().width / 3.f + ptr->GetGlobalBounds().width / 3.f; //최소 거리
 		if (distance < minDistance)
 		{
 			SetPosition(position - dz * speed * 2.f * dt);
@@ -137,3 +148,14 @@ void Zombie::Collision(float dt)
 	distanceToPlayer = Utils::Distance(player->GetPosition(), GetPosition());
 }
 
+void Zombie::Damaged(int damage)
+{
+
+	hp -= damage;
+	if (hp <= 0)
+	{
+		isDead = true;
+		SCENE_MGR.GetCurrentScene()->DeleteGo(this);
+	}
+
+}

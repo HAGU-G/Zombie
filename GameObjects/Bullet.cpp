@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Bullet.h"
 #include "Player.h"
+#include "SceneGame.h"
 
 Bullet::Bullet(const sf::Vector2f& position, const std::string& name)
 	:GameObject(name), speed(3000), damage(34)
@@ -15,7 +16,7 @@ Bullet::Bullet(const sf::Vector2f& position, const std::string& name)
 	Utils::Normalize(direction = mouseWorldPos - position);
 	shape.rotate(Utils::Angle(direction));
 
-	SetPosition(position + direction * shape.getSize().x);
+	SetPosition(position + direction * 20.f);
 	shape.setPosition(this->position);
 
 	shape.setScale({ 0.f , 1.f });
@@ -43,13 +44,40 @@ void Bullet::Update(float dt)
 
 	GameObject::Update(dt);
 	Translate(direction * speed * dt);
+
+	//충돌 검사
+	std::pair<sf::Vector2f, sf::Vector2f> boundary = dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrentScene())->GetBoundary();
+	//충돌 검사: 벽
+	if (position.x < boundary.first.x)
+	{
+		position.y -= (position.x - boundary.first.x) * tan(Utils::DegreeToRadian(Utils::Angle(direction)));
+		Utils::ElasticCollision(position.x, boundary.first.x, 0.f);
+		Hit();
+	}
+	if (position.x > boundary.second.x)
+	{
+		position.y -= (position.x - boundary.second.x) * tan(Utils::DegreeToRadian(Utils::Angle(direction)));
+		Utils::ElasticCollision(position.x, boundary.second.x, 0.f);
+		Hit();
+	}
+	if (position.y < boundary.first.y)
+	{
+		position.x -= (position.y - boundary.first.y) * (1 / tan(Utils::DegreeToRadian(Utils::Angle(direction))));
+		Utils::ElasticCollision(position.y, boundary.first.y, 0.f);
+		Hit();
+	}
+	if (position.y > boundary.second.y)
+	{
+		position.x -= (position.y - boundary.second.y) * (1 / tan(Utils::DegreeToRadian(Utils::Angle(direction))));
+		Utils::ElasticCollision(position.y, boundary.second.y, 0.f);
+		Hit();
+	}
+
+	//총알 흔적
 	shape.setPosition(position);
 	float distance = Utils::Distance(prePos, position);
+	shape.setScale({ 1.f + distance / 3,1.f });
 
-	if (displacement >= 15.f)
-		shape.setScale({ 1.f + distance / 3,1.f });
-	else
-		displacement += distance;
 }
 
 void Bullet::Draw(sf::RenderWindow& window)
@@ -63,7 +91,7 @@ void Bullet::Draw(sf::RenderWindow& window)
 	}
 }
 
-void Bullet::Hit(sf::Vector2f hitedObjectPos)
+void Bullet::Hit()
 {
 	if (!isHit)
 	{

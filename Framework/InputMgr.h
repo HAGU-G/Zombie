@@ -51,6 +51,8 @@ public:
 	static bool GetMouseButtonUp(sf::Mouse::Button key);
 	static bool GetMouseButton(sf::Mouse::Button key);
 
+	static bool AnyKeyDown();
+
 	static sf::Keyboard::Key MouseButtonToKey(sf::Mouse::Button button)
 	{
 		return (sf::Keyboard::Key)(button + sf::Keyboard::Key::KeyCount);

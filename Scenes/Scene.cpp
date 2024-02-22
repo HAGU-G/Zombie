@@ -8,6 +8,9 @@ Scene::Scene(SceneIds id) :
 	soundResMgr(RES_MGR_SOUND_BUFFER)
 {
 	worldView.setSize((sf::Vector2f)FRAMEWORK.GetWindowSize());
+	worldView.setCenter((sf::Vector2f)FRAMEWORK.GetWindowSize() * 0.5f);
+	uiView.setSize((sf::Vector2f)FRAMEWORK.GetWindowSize());
+	uiView.setCenter((sf::Vector2f)FRAMEWORK.GetWindowSize() * 0.5f);
 }
 
 sf::Vector2f Scene::ScreenToWorld(sf::Vector2i screenPos)
@@ -88,8 +91,6 @@ void Scene::Update(float dt)
 			obj->Update(dt);
 		}
 	}
-
-
 
 
 	for (auto obj : sortList)

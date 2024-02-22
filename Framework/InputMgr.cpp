@@ -179,3 +179,8 @@ bool InputMgr::GetMouseButton(sf::Mouse::Button button)
 {
     return std::find(ingList.begin(), ingList.end(), MouseButtonToKey(button)) != ingList.end();;
 }
+
+bool InputMgr::AnyKeyDown()
+{
+    return !downList.empty();
+}
