@@ -33,7 +33,7 @@
     <ClCompile Include="Framework\SceneMgr.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="GameObjects\GameObject.cpp">
+    <ClCompile Include="GameObjects\Base\GameObject.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Scenes\SceneDev1.cpp">
@@ -42,10 +42,10 @@
     <ClCompile Include="Scenes\SceneDev2.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="GameObjects\SpriteGo.cpp">
+    <ClCompile Include="GameObjects\Base\SpriteGo.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="GameObjects\TextGo.cpp">
+    <ClCompile Include="GameObjects\Base\TextGo.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Framework\Framework.cpp">
@@ -72,7 +72,7 @@
     <ClCompile Include="GameObjects\Bullet.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Crosshair.cpp">
+    <ClCompile Include="GameObjects\UI\Crosshair.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -101,7 +101,7 @@
     <ClInclude Include="Framework\SceneMgr.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="GameObjects\GameObject.h">
+    <ClInclude Include="GameObjects\Base\GameObject.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Scenes\SceneDev1.h">
@@ -110,10 +110,10 @@
     <ClInclude Include="Scenes\SceneDev2.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="GameObjects\SpriteGo.h">
+    <ClInclude Include="GameObjects\Base\SpriteGo.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="GameObjects\TextGo.h">
+    <ClInclude Include="GameObjects\Base\TextGo.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Framework\Framework.h">
@@ -140,7 +140,7 @@
     <ClInclude Include="GameObjects\Bullet.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Crosshair.h">
+    <ClInclude Include="GameObjects\UI\Crosshair.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

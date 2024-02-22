@@ -29,7 +29,6 @@ protected:
 	float atkInterval = 1.f;
 	float atkTimer = 0.f;
 
-	bool isDead = false;
 
 	Player* player;
 	float distanceToPlayer;
@@ -40,6 +39,8 @@ protected:
 	void Collision(float dt);
 
 public:
+	bool isDead = false;
+
 	~Zombie() = default;
 
 
@@ -52,6 +53,5 @@ public:
 
 
 	inline void SetPlayer(Player* p) { player = p; }
-
 };
 

@@ -7,7 +7,7 @@ Bullet::Bullet(const sf::Vector2f& position, const std::string& name)
 {
 	sortLayer = 4;
 	tag = 1;
-	shape.setSize({ 60.f, 3.f });
+	shape.setSize({ 3.f, 2.f });
 	shape.setFillColor(sf::Color::Yellow);
 	Utils::SetOrigin(shape, Origins::MR);
 
@@ -17,6 +17,9 @@ Bullet::Bullet(const sf::Vector2f& position, const std::string& name)
 
 	SetPosition(position + direction * shape.getSize().x);
 	shape.setPosition(this->position);
+
+	shape.setScale({ 0.f , 1.f });
+	prePos = position;
 }
 
 void Bullet::Init()
@@ -36,9 +39,17 @@ void Bullet::Reset()
 
 void Bullet::Update(float dt)
 {
+	prePos = position;
+
 	GameObject::Update(dt);
 	Translate(direction * speed * dt);
 	shape.setPosition(position);
+	float distance = Utils::Distance(prePos, position);
+
+	if (displacement >= 15.f)
+		shape.setScale({ 1.f + distance / 3,1.f });
+	else
+		displacement += distance;
 }
 
 void Bullet::Draw(sf::RenderWindow& window)
@@ -52,7 +63,7 @@ void Bullet::Draw(sf::RenderWindow& window)
 	}
 }
 
-void Bullet::Hit()
+void Bullet::Hit(sf::Vector2f hitedObjectPos)
 {
 	if (!isHit)
 	{

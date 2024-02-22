@@ -26,10 +26,10 @@ void ZombieSpawner::Reset()
 	zombieTypes.push_back(Zombie::Types::Crawler);
 	zombieTypes.push_back(Zombie::Types::Chaser);
 
-	interval = 1.f; //주기
+	interval = 100000.f; //주기
 	spawnCount = 1;
 	radius = 250.f;
-	timer = 0.f;
+	timer = 100000.f;
 }
 
 void ZombieSpawner::Update(float dt)

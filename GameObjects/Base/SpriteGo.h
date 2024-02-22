@@ -27,5 +27,6 @@ public:
 
 
 	inline const sf::FloatRect& GetLocalBounds() const { return sprite.getLocalBounds(); }
+	inline const sf::FloatRect& GetGlobalBounds() const { return sprite.getGlobalBounds(); }
 };
 

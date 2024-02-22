@@ -109,7 +109,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>.;.\SFML-2.6.1\include;.\Framework;.\GameObjects;.\Scenes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;.\SFML-2.6.1\include;.\Framework;.\GameObjects\Base;.\GameObjects\UI;.\GameObjects;.\Scenes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
@@ -137,7 +137,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Crosshair.cpp" />
+    <ClCompile Include="GameObjects\UI\Crosshair.cpp" />
     <ClCompile Include="GameObjects\Bullet.cpp" />
     <ClCompile Include="Framework\Framework.cpp" />
     <ClCompile Include="Framework\InputMgr.cpp">
@@ -147,7 +147,7 @@
     <ClCompile Include="Framework\Utils.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="GameObjects\GameObject.cpp" />
+    <ClCompile Include="GameObjects\Base\GameObject.cpp" />
     <ClCompile Include="GameObjects\ZombieSpawner.cpp" />
     <ClCompile Include="main.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
@@ -161,13 +161,13 @@
     <ClCompile Include="Framework\SceneMgr.cpp" />
     <ClCompile Include="Scenes\SceneDev1.cpp" />
     <ClCompile Include="Scenes\SceneDev2.cpp" />
-    <ClCompile Include="GameObjects\SpriteGo.cpp" />
-    <ClCompile Include="GameObjects\TextGo.cpp" />
+    <ClCompile Include="GameObjects\Base\SpriteGo.cpp" />
+    <ClCompile Include="GameObjects\Base\TextGo.cpp" />
     <ClCompile Include="GameObjects\TileMap.cpp" />
     <ClCompile Include="GameObjects\Zombie.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Crosshair.h" />
+    <ClInclude Include="GameObjects\UI\Crosshair.h" />
     <ClInclude Include="GameObjects\Bullet.h" />
     <ClInclude Include="Framework\Framework.h" />
     <ClInclude Include="Framework\Defines.h" />
@@ -176,7 +176,7 @@
     <ClInclude Include="Framework\ResourceMgr.h" />
     <ClInclude Include="Framework\Singleton.h" />
     <ClInclude Include="Framework\Utils.h" />
-    <ClInclude Include="GameObjects\GameObject.h" />
+    <ClInclude Include="GameObjects\Base\GameObject.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="GameObjects\Player.h" />
     <ClInclude Include="Scenes\SceneGame.h" />
@@ -184,8 +184,8 @@
     <ClInclude Include="Framework\SceneMgr.h" />
     <ClInclude Include="Scenes\SceneDev1.h" />
     <ClInclude Include="Scenes\SceneDev2.h" />
-    <ClInclude Include="GameObjects\SpriteGo.h" />
-    <ClInclude Include="GameObjects\TextGo.h" />
+    <ClInclude Include="GameObjects\Base\SpriteGo.h" />
+    <ClInclude Include="GameObjects\Base\TextGo.h" />
     <ClInclude Include="GameObjects\TileMap.h" />
     <ClInclude Include="GameObjects\Zombie.h" />
     <ClInclude Include="GameObjects\ZombieSpawner.h" />

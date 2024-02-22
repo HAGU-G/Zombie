@@ -32,12 +32,6 @@ void Player::Update(float dt)
 {
 	SpriteGo::Update(dt);
 
-	//Á×À½
-	/*if (hp == 0)
-	{
-		active = false;
-	}*/
-
 	//Ä³¸¯ÅÍ È¸Àü
 	sf::Vector2i mousePos = (sf::Vector2i)InputMgr::GetMousePos();
 	sf::Vector2f mouseWorldPos = SCENE_MGR.GetCurrentScene()->ScreenToWorld(mousePos);
@@ -79,6 +73,12 @@ void Player::Update(float dt)
 	{
 		Shot();
 	}
+
+	//Á×À½
+	/*if (hp == 0)
+	{
+		active = false;
+	}*/
 }
 
 void Player::Draw(sf::RenderWindow& window)

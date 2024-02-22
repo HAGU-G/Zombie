@@ -3,13 +3,13 @@
 
 void Framework::Init(int width, int height, const std::string& name)
 {
-    //window.setFramerateLimit(165);
     srand(std::time(NULL));
 
     windowSize.x = width;
     windowSize.y = height;
 
     window.create(sf::VideoMode(windowSize.x, windowSize.y), name);
+    window.setFramerateLimit(30);
 
     InputMgr::Init();
     SCENE_MGR.Init();

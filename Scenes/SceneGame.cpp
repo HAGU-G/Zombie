@@ -21,7 +21,7 @@ void SceneGame::Init()
 	AddGo(new Crosshair(), Scene::Ui);
 
 	//좀비 스포너
-	spawners.push_back(new ZombieSpawner());
+	//spawners.push_back(new ZombieSpawner());
 	spawners.push_back(new ZombieSpawner());
 	for (auto s : spawners)
 	{
@@ -133,6 +133,8 @@ void SceneGame::Update(float dt)
 		doReset = true;
 	}
 
+	BulletCollision();
+
 	PostUpdate(dt);
 }
 
@@ -188,4 +190,26 @@ Bullet* SceneGame::CreateBullet(Player* player)
 	AddGo(b);
 	bullets.push_back(b);
 	return b;
+}
+
+
+
+void SceneGame::BulletCollision()
+{
+	for (auto zombie : zombieObjects)
+	{
+		if (!zombie->isDead)
+		{
+			for (auto bullet : bullets)
+			{
+				if (!zombie->isDead && !bullet->isHit && Utils::IsCollideWithLineSegment(zombie->GetPosition(), bullet->GetPosition(), bullet->prePos, zombie->GetGlobalBounds().width * 4.5f / 10.f))
+				{
+					zombie->isDead = true;
+					bullet->Hit(zombie->GetPosition());
+					DeleteGo(zombie);
+				}
+			}
+		}
+	}
+
 }

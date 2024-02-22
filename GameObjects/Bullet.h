@@ -7,13 +7,16 @@ class Bullet : public GameObject
 {
 protected:
     sf::Vector2f direction;
-    sf::RectangleShape shape;
     float speed;
     int damage;
+    float displacement = 0.f; //움직인 거리
 
-    bool isHit = false;
 
 public:
+    bool isHit = false;
+    sf::Vector2f prePos;
+    sf::RectangleShape shape;
+
     Bullet(const sf::Vector2f& position, const std::string& name = "bullet");
     ~Bullet() = default;
 
@@ -24,7 +27,7 @@ public:
     void Update(float dt) override;
     void Draw(sf::RenderWindow& window) override;
     
-    void Hit();
+    void Hit(sf::Vector2f hitedObjectPos);
 
     static Bullet* Create(Player* player);
 };

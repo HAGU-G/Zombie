@@ -53,6 +53,7 @@ void Zombie::Init()
 
 	SetTexture(textureId);
 	SetOrigin(Origins::MC);
+
 }
 
 void Zombie::Release()
@@ -71,34 +72,26 @@ void Zombie::Update(float dt)
 	atkTimer += dt;
 	SpriteGo::Update(dt);
 
-	//총알 충돌 검사
-	for (auto ptr : dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrentScene())->zombieObjects)
-	{
-
-	}
-
-
-
 	direction = player->GetPosition() - position;
 	Utils::Normalize(direction);
 
 	if (type == Types::Crawler)
 	{
-		speed += maxSpeed*2 * dt;
+		speed += maxSpeed * 2 * dt;
 		if (speed > maxSpeed)
 			speed = 0;
 	}
 
 	//플레이어에게 이동
-	if (distanceToPlayer > sprite.getLocalBounds().width / 3)
+	if (distanceToPlayer > sprite.getGlobalBounds().width / 3)
 		//SetPosition(GetPosition() + Utils::GetNormalize(player->GetPosition() - GetPosition()) * speed * dt);
 		Translate(direction * speed * dt);
-	
+
 	//충돌 검사
 	Collision(dt);
 
 	//플레이어 공격
-	if (atkTimer >= atkInterval && distanceToPlayer < sprite.getLocalBounds().width / 3)
+	if (atkTimer >= atkInterval && distanceToPlayer < sprite.getGlobalBounds().width / 3)
 	{
 		player->Damaged(atkDamage);
 	}
@@ -116,28 +109,12 @@ void Zombie::Collision(float dt)
 	{
 		if (ptr == this)
 			continue;
-		sf::Vector2f dz = Utils::GetNormalize(ptr->GetPosition() - GetPosition()); //다른 좀비로의 방향
-		float distance = Utils::Distance(ptr->GetPosition(), GetPosition()); //다른 좀비와의 거리
-		float minDistance = sprite.getLocalBounds().width / 3 + ptr->GetLocalBounds().width / 3; //최소 거리
+		sf::Vector2f dz = Utils::GetNormalize(ptr->GetPosition() - position); //다른 좀비로의 방향
+		float distance = Utils::Distance(ptr->GetPosition(), position); //다른 좀비와의 거리
+		float minDistance = sprite.getGlobalBounds().width / 3.f + ptr->GetLocalBounds().width / 3.f; //최소 거리
 		if (distance < minDistance)
 		{
-			SetPosition(GetPosition() - dz * speed * 2.f * dt);
-		}
-	}
-
-	//총알
-	if (!isDead)
-	{
-		for (auto ptr : dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrentScene())->bullets)
-		{
-			float distance = Utils::Distance(ptr->GetPosition(), GetPosition()); //총알과의 거리
-			float minDistance = sprite.getLocalBounds().width / 3; //최소 거리
-			if (!isDead && distance < minDistance)
-			{
-				isDead = true;
-				ptr->Hit();
-				SCENE_MGR.GetCurrentScene()->DeleteGo(this);
-			}
+			SetPosition(position - dz * speed * 2.f * dt);
 		}
 	}
 
@@ -159,3 +136,4 @@ void Zombie::Collision(float dt)
 	SetRotation(rotation);
 	distanceToPlayer = Utils::Distance(player->GetPosition(), GetPosition());
 }
+

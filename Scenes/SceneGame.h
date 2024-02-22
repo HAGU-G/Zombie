@@ -15,6 +15,8 @@ protected:
 	bool doReset = false;
 	std::pair<sf::Vector2f, sf::Vector2f> boundary;
 
+	void BulletCollision();
+
 public:
 	SceneGame(SceneIds id);
 	~SceneGame() override = default;
@@ -38,5 +40,6 @@ public:
 
 	std::list<Bullet*> bullets;
 	Bullet* CreateBullet(Player* player);
+
 };
 
