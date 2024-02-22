@@ -19,9 +19,11 @@ void TileMap::UpdateTransform()
 	float scaleX = isFlipX ? -scale.x : scale.x;
 	float scaleY = isFlipX ? -scale.y : scale.y;
 
-	transform.scale(scaleX, scaleY, position.x , position.y);
+	transform.scale(scaleX, scaleY, position.x, position.y);
 	transform.rotate(rotation, position.x, position.y);
 	transform.translate(position - origin);
+
+	SetBoundary();
 }
 
 void TileMap::Set(const sf::Vector2i& count, const sf::Vector2f& size)
@@ -59,6 +61,8 @@ void TileMap::Set(const sf::Vector2i& count, const sf::Vector2f& size)
 			}
 		}
 	}
+
+	SetBoundary();
 }
 
 void TileMap::Init()
@@ -121,6 +125,19 @@ void TileMap::Translate(const sf::Vector2f& delta)
 	UpdateTransform();
 }
 
+void TileMap::SetBoundary()
+{
+	boundaryLT.x = position.x - ((cellCount.x / 2.f - 1) * cellSize.x)*scale.x;
+	boundaryLT.y = position.y - ((cellCount.y / 2.f - 1) * cellSize.y)*scale.y;
+	boundaryRB.x = position.x + ((cellCount.x / 2.f - 1) * cellSize.x)*scale.x;
+	boundaryRB.y = position.y + ((cellCount.y / 2.f - 1) * cellSize.y)*scale.y;
+}
+
+std::pair<const sf::Vector2f&, const sf::Vector2f&> TileMap::GetBoundary() const
+{
+	return std::make_pair(boundaryLT, boundaryRB);
+}
+
 void TileMap::SetPosition(const sf::Vector2f& pos)
 {
 	GameObject::SetPosition(pos);
@@ -135,6 +152,7 @@ void TileMap::SetPosition(const sf::Vector2f& pos)
 
 void TileMap::SetScale(const sf::Vector2f& scale)
 {
+	this->scale = scale;
 	GameObject::SetScale(scale);
 	UpdateTransform();
 

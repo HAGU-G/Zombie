@@ -3,7 +3,7 @@
 
 void Framework::Init(int width, int height, const std::string& name)
 {
-    window.setFramerateLimit(30);
+    //window.setFramerateLimit(165);
     srand(std::time(NULL));
 
     windowSize.x = width;
@@ -34,6 +34,7 @@ void Framework::Do()
             InputMgr::UpdateEvent(event);
         }
         InputMgr::Update(GetDT());
+
 
         SCENE_MGR.Update(GetDT());
         window.clear();

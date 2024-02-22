@@ -6,14 +6,13 @@ protected:
 	std::string spriteSheetId;
 	sf::Texture* texture;
 
-	int rows = 10;
-	int cols = 10;
-
 	sf::Vector2i cellCount;
 	sf::Vector2f cellSize;
 
-
 	sf::Transform transform;
+
+	sf::Vector2f boundaryLT;
+	sf::Vector2f boundaryRB;
 
 public:
 	sf::VertexArray va;
@@ -41,6 +40,8 @@ public:
 	void SetScale(const sf::Vector2f& scale) override;
 	void SetRotation(float r) override;
 	void Translate(const sf::Vector2f& delta) override;
+	void SetBoundary();
+	std::pair<const sf::Vector2f&, const sf::Vector2f&> GetBoundary() const;
 
 	void SetFlipX(bool flip) override;
 	void SetFlipY(bool flip) override;

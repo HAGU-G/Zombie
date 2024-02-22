@@ -116,6 +116,7 @@ void Scene::Update(float dt)
 void Scene::Draw(sf::RenderWindow& window)
 {
 	const sf::View& saveView = window.getView();
+
 	window.setView(worldView);
 	for (auto obj : gameObjects)
 	{
@@ -199,6 +200,7 @@ GameObject* Scene::AddGo(GameObject* obj, Layers layer)
 					return obj;
 				}
 				++it;
+			
 			}
 			gameObjects.push_back(obj);
 			return obj;

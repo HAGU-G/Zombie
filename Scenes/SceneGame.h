@@ -5,11 +5,15 @@
 
 class ZombieSpawner;
 class Player;
+class Bullet;
+
 class SceneGame : public Scene
 {
 protected:
 	Player* player;
 	std::vector<ZombieSpawner*> spawners;
+	bool doReset = false;
+	std::pair<sf::Vector2f, sf::Vector2f> boundary;
 
 public:
 	SceneGame(SceneIds id);
@@ -27,8 +31,12 @@ public:
 	void Draw(sf::RenderWindow& window) override;
 
 	inline Player* GetPlayer() { return player; }
+	inline const std::pair<sf::Vector2f, sf::Vector2f>& GetBoundary() const { return boundary; }
 
 	std::list<Zombie*> zombieObjects;
-	Zombie* AddZombie(Zombie::Types zombieType);
+	Zombie* CreateZombie(Zombie::Types zombieType);
+
+	std::list<Bullet*> bullets;
+	Bullet* CreateBullet(Player* player);
 };
 

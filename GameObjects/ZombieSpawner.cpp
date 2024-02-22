@@ -43,7 +43,7 @@ void ZombieSpawner::Update(float dt)
 		{
 			sf::Vector2f pos = position + Utils::RandomInUnitCircle() * radius;
 			Zombie::Types zombieType = zombieTypes[Utils::RandomRange(0, zombieTypes.size())];
-			dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrentScene())->AddZombie(zombieType)->SetPosition(pos);
+			dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrentScene())->CreateZombie(zombieType)->SetPosition(pos);
 
 		}
 	}

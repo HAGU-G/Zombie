@@ -21,11 +21,15 @@ protected:
 	Types type;
 	
 	int maxHp = 1;
-	float speed = 1;
 	float maxSpeed = 1;
 
-	int currentHp = 1;
-	int aktDamage = 1;
+	float speed = 1;
+	int hp = 1;
+	int atkDamage = 1;
+	float atkInterval = 1.f;
+	float atkTimer = 0.f;
+
+	bool isDead = false;
 
 	Player* player;
 	float distanceToPlayer;
@@ -33,6 +37,7 @@ protected:
 
 	Zombie(const std::string& name="");
 
+	void Collision(float dt);
 
 public:
 	~Zombie() = default;
@@ -44,6 +49,7 @@ public:
 	void Update(float dt) override;
 	void Draw(sf::RenderWindow& window) override;
 	inline float GetDistanceToPlayer() const { return distanceToPlayer; }
+
 
 	inline void SetPlayer(Player* p) { player = p; }
 

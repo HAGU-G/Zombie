@@ -4,6 +4,8 @@
 #include "TileMap.h"
 #include "Zombie.h"
 #include "ZombieSpawner.h"
+#include "Bullet.h"
+#include "Crosshair.h"
 
 SceneGame::SceneGame(SceneIds id)
 	:Scene(id)
@@ -13,13 +15,17 @@ SceneGame::SceneGame(SceneIds id)
 void SceneGame::Init()
 {
 	//배경
-	
+	AddGo(new TileMap("Background"));
+
+	//크로스헤어
+	AddGo(new Crosshair(), Scene::Ui);
+
 	//좀비 스포너
 	spawners.push_back(new ZombieSpawner());
 	spawners.push_back(new ZombieSpawner());
 	for (auto s : spawners)
 	{
-		s->SetPosition(Utils::RandomOnUnitCircle()*250.f);
+		s->SetPosition(Utils::RandomOnUnitCircle() * 250.f);
 		AddGo(s);
 	}
 
@@ -27,7 +33,6 @@ void SceneGame::Init()
 	player = new Player("Player");
 	AddGo(player);
 
-	AddGo(new TileMap("Background"));
 	Scene::Init();
 }
 
@@ -35,10 +40,14 @@ void SceneGame::Release()
 {
 	Scene::Release();
 	zombieObjects.clear();
+	spawners.clear();
+	bullets.clear();
+	player = nullptr;
 }
 
 void SceneGame::Enter()
 {
+	FRAMEWORK.GetWindow().setMouseCursorVisible(false);
 	Scene::Enter();
 
 	srand(time(NULL));
@@ -55,8 +64,9 @@ void SceneGame::Enter()
 	player->SetPosition(centerPos);
 	tileMap->SetPosition(centerPos);
 	tileMap->SetOrigin(Origins::MC);
-	//tileMap->SetRotation(0);
+	//tileMap->SetRotation(45);
 	tileMap->UpdateTransform();
+	boundary = tileMap->GetBoundary();
 
 	worldView.setCenter(player->GetPosition());
 
@@ -65,6 +75,7 @@ void SceneGame::Enter()
 void SceneGame::Exit()
 {
 	Scene::Exit();
+	FRAMEWORK.GetWindow().setMouseCursorVisible(true);
 }
 
 void SceneGame::Update(float dt)
@@ -80,11 +91,11 @@ void SceneGame::Update(float dt)
 	//추가
 	if (InputMgr::GetKey(sf::Keyboard::Space))
 	{
-		AddZombie(Zombie::Types(rand() % (int)Zombie::Types::Count));
+		CreateZombie(Zombie::Types(rand() % (int)Zombie::Types::Count));
 	}
 	if (InputMgr::GetKeyDown(sf::Keyboard::Enter))
 	{
-		AddZombie(Zombie::Types(rand() % (int)Zombie::Types::Count));
+		CreateZombie(Zombie::Types(rand() % (int)Zombie::Types::Count));
 		tileMap->sortLayer = 50;
 		ReSoltGo(tileMap);
 	}
@@ -117,20 +128,38 @@ void SceneGame::Update(float dt)
 			delete z;
 		}
 	}
+	if (InputMgr::GetKeyDown(sf::Keyboard::Escape))
+	{
+		doReset = true;
+	}
 
 	PostUpdate(dt);
 }
 
 void SceneGame::PostUpdate(float dt)
 {
+	//오브젝트 삭제 (delete)
 	while (deleteDeque.size() > 0)
 	{
+		//필요한 정보를 미리 가져온다.
 		GameObject* temp = deleteDeque.front();
+		int tag = temp->GetTag();
+
+		//삭제 시작
 		RemoveGo(temp);
-		deleteDeque.pop_front();
-		if(temp->GetTag() == 0)
+		deleteDeque.pop_front(); 
+		if (tag == 0)
 			zombieObjects.remove(dynamic_cast<Zombie*>(temp));
+		else if (tag == 1)
+			bullets.remove(dynamic_cast<Bullet*>(temp));
 		delete temp;
+	}
+	if (doReset)
+	{
+		doReset = false;
+		Release();
+		Init();
+		Enter();
 	}
 }
 
@@ -140,7 +169,7 @@ void SceneGame::Draw(sf::RenderWindow& window)
 }
 
 
-Zombie* SceneGame::AddZombie(Zombie::Types zombieType)
+Zombie* SceneGame::CreateZombie(Zombie::Types zombieType)
 {
 	Zombie* z = Zombie::Create(zombieType);
 	z->Init();
@@ -149,4 +178,14 @@ Zombie* SceneGame::AddZombie(Zombie::Types zombieType)
 	AddGo(z);
 	zombieObjects.push_back(z);
 	return z;
+}
+
+Bullet* SceneGame::CreateBullet(Player* player)
+{
+	Bullet* b = Bullet::Create(player);
+	b->Init();
+	b->Reset();
+	AddGo(b);
+	bullets.push_back(b);
+	return b;
 }

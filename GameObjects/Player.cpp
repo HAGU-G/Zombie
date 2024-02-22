@@ -1,5 +1,7 @@
 #include "pch.h"
 #include "Player.h"
+#include "Bullet.h"
+#include "SceneGame.h"
 
 Player::Player(const std::string& name) : SpriteGo(name)
 {
@@ -12,6 +14,7 @@ void Player::Init()
 	SpriteGo::Init();
 	SetTexture(textureId);
 	SetOrigin(Origins::MC);
+
 }
 
 void Player::Release()
@@ -22,16 +25,22 @@ void Player::Release()
 void Player::Reset()
 {
 	SpriteGo::Reset();
+	active = true;
 }
 
 void Player::Update(float dt)
 {
 	SpriteGo::Update(dt);
 
+	//죽음
+	/*if (hp == 0)
+	{
+		active = false;
+	}*/
+
 	//캐릭터 회전
 	sf::Vector2i mousePos = (sf::Vector2i)InputMgr::GetMousePos();
 	sf::Vector2f mouseWorldPos = SCENE_MGR.GetCurrentScene()->ScreenToWorld(mousePos);
-
 
 	//sf::Vector2f mouseWorldPos = InputMgr::GetMousePos() + SCENE_MGR.GetCurrentScene()->GetViewCenter() - sf::Vector2f(FRAMEWORK.GetWindow().getSize()) * 0.5f;
 	float lookAngle = Utils::Angle(mouseWorldPos - GetPosition());
@@ -45,26 +54,45 @@ void Player::Update(float dt)
 	{
 		Utils::Normalize(direction);
 	}
-
+	sf::Vector2f tempPos(GetPosition() + direction * speed * dt);
 
 	//충돌 검사
-	sf::Vector2f fixPos = GetPosition() + direction * speed * dt;
-	sf::FloatRect windowBound({ 0,0 ,(float)Framework::Instance().GetWindowSize().x, (float)Framework::Instance().GetWindowSize().y });
-
+	std::pair<sf::Vector2f, sf::Vector2f> boundary= dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrentScene())->GetBoundary();
 	//충돌 검사: 윈도우
-	if (fixPos.x < windowBound.left + sprite.getLocalBounds().width / 3)
-		Utils::ElasticCollision(fixPos.x, windowBound.left + sprite.getLocalBounds().width / 3, 0.f);
-	if (fixPos.x > windowBound.width - sprite.getLocalBounds().width / 3)
-		Utils::ElasticCollision(fixPos.x, windowBound.width - sprite.getLocalBounds().width / 3, 0.f);
-	if (fixPos.y < windowBound.top + sprite.getLocalBounds().height / 3)
-		Utils::ElasticCollision(fixPos.y, windowBound.top + sprite.getLocalBounds().height / 3, 0.f);
-	if (fixPos.y > windowBound.height - sprite.getLocalBounds().height / 3)
-		Utils::ElasticCollision(fixPos.y, windowBound.height - sprite.getLocalBounds().height / 3, 0.f);
-	SetPosition(fixPos);
+	if (tempPos.x < boundary.first.x)
+		Utils::ElasticCollision(tempPos.x, boundary.first.x, 0.f);
+	if (tempPos.x > boundary.second.x)
+		Utils::ElasticCollision(tempPos.x, boundary.second.x, 0.f);
+	if (tempPos.y < boundary.first.y)
+		Utils::ElasticCollision(tempPos.y, boundary.first.y, 0.f);
+	if (tempPos.y > boundary.second.y)
+		Utils::ElasticCollision(tempPos.y, boundary.second.y, 0.f);
 
+	SetPosition(tempPos);
+
+	//Shot
+	if (InputMgr::GetMouseButtonDown(sf::Mouse::Left))
+	{
+		Shot();
+	}
+	if (InputMgr::GetMouseButton(sf::Mouse::Right))
+	{
+		Shot();
+	}
 }
 
 void Player::Draw(sf::RenderWindow& window)
 {
 	SpriteGo::Draw(window);
+}
+
+void Player::Damaged(int damage)
+{
+		hp = std::max(hp - damage, 0);
+}
+
+void Player::Shot()
+{
+	dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrentScene())->CreateBullet(this);
+
 }
