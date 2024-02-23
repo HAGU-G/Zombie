@@ -171,14 +171,15 @@ bool Utils::IsCollideWithLineSegment(const sf::Vector2f& p1, const sf::Vector2f&
 		return true;
 
 	//좌표계 원점 변환, 기준점 설정
-	sf::Vector2f Point1 = lineP1.y < lineP2.y ? lineP1 - p1 : lineP2 - p1;
-	sf::Vector2f Point2 = lineP1.y < lineP2.y ? lineP2 - p1 : lineP1 - p1;
+	sf::Vector2f point1 = lineP1 - p1;
+	sf::Vector2f point2 = lineP2 - p1;
 
-	float angle1 = acosf(Point1.x / Utils::Magnitude(Point1));
-	float angle2 = acosf(Point2.x / Utils::Magnitude(Point2));
-	if (Point1.y < 0)
+	float angle1 = acosf(point1.x / Utils::Magnitude(point1));
+	float angle2 = acosf(point2.x / Utils::Magnitude(point2));
+
+	if (point1.y < 0)
 		angle1 = 2.f * M_PI - angle1;
-	if (Point2.y < 0)
+	if (point2.y < 0)
 		angle2 = 2.f * M_PI - angle2;
 	if (angle2 > angle1)
 	{
@@ -186,65 +187,35 @@ bool Utils::IsCollideWithLineSegment(const sf::Vector2f& p1, const sf::Vector2f&
 		angle1 = angle2;
 		angle2 = temp;
 
-		sf::Vector2f temp2 = Point1;
-		Point1 = Point2;
-		Point2 = temp2;
-	}
-	sf::Vector2f inverseSlopePoint = { (Point1 - Point2).y, -(Point1 - Point2).x };
-	float inverseSlopeAngle = acosf(inverseSlopePoint.x / Utils::Magnitude(inverseSlopePoint));
-	if (inverseSlopePoint.y < 0)
-		inverseSlopeAngle = 2.f * M_PI - inverseSlopeAngle;
-
-	//선분과 닿을 수 있는 각도인지 검사
-	bool check1 = false;
-	if (angle1 - angle2 > M_PI && (inverseSlopeAngle >= angle1 || inverseSlopeAngle <= angle2))
-	{
-		check1 = true;
-
-		float temp = angle1;
-		angle1 = angle2;
-		angle2 = temp;
-
-		sf::Vector2f temp2 = Point1;
-		Point1 = Point2;
-		Point2 = temp2;
-	}
-	else if (inverseSlopeAngle <= angle1 && inverseSlopeAngle >= angle2)
-	{
-		check1 = true;
+		sf::Vector2f temp2 = point1;
+		point1 = point2;
+		point2 = temp2;
 	}
 
-	//선분과의 거리 검사
-	if (check1)
+	//선분과 닿을 수 있는 각도인지 검사 후 거리 검사
+	if (angle1 - angle2 >= M_PI)
 	{
-		if (Point1.y * Point2.y >= 0)
+		sf::Vector2f inverseSlopePoint = { (point2 - point1).y, -(point2 - point1).x };
+		float inverseSlopeAngle = acosf(inverseSlopePoint.x / Utils::Magnitude(inverseSlopePoint));
+		if (inverseSlopePoint.y < 0)
+			inverseSlopeAngle = 2.f * M_PI - inverseSlopeAngle;
+
+		if (inverseSlopeAngle >= angle1 || inverseSlopeAngle <= angle2)
 		{
-			if (angle1 > M_PI)
-				angle1 = 2.f * M_PI - angle1;
-			if (inverseSlopeAngle > M_PI)
-				inverseSlopeAngle = 2.f * M_PI - inverseSlopeAngle;
-
-			if (Utils::Magnitude(Point1) * cos(angle1 - inverseSlopeAngle) <= radius)
-				return true;
+			return (Utils::Magnitude(point2) * cosf(angle2 - inverseSlopeAngle + (inverseSlopeAngle <= angle2 ? 0.f : 2.f * M_PI))) <= radius;
 		}
-		else if (Point1.x * Point2.x >= 0 || inverseSlopeAngle <= M_PI_2 || (inverseSlopeAngle >= M_PI && inverseSlopeAngle <= M_PI + M_PI_2))
-		{
-			angle1 = asinf(Point1.y / Utils::Magnitude(Point1));
-			angle2 = asinf(Point2.y / Utils::Magnitude(Point2));
-			inverseSlopeAngle = asinf(inverseSlopePoint.y / Utils::Magnitude(inverseSlopePoint));
+	}
+	else
+	{
+		sf::Vector2f inverseSlopePoint = { (point1 - point2).y, -(point1 - point2).x };
+		float inverseSlopeAngle = acosf(inverseSlopePoint.x / Utils::Magnitude(inverseSlopePoint));
 
-			if (Utils::Magnitude(Point2) * cos(angle2 - inverseSlopeAngle) <= radius)
-				return true;
-		}
-		else if (inverseSlopeAngle >= M_PI + M_PI_2 || (inverseSlopeAngle >= M_PI_2 && inverseSlopeAngle <= M_PI))
-		{
-			if (angle2 > M_PI)
-				angle2 = 2.f * M_PI - angle2;
-			if (inverseSlopeAngle > M_PI)
-				inverseSlopeAngle = 2.f * M_PI - inverseSlopeAngle;
+		if (inverseSlopePoint.y < 0)
+			inverseSlopeAngle = 2.f * M_PI - inverseSlopeAngle;
 
-			if (Utils::Magnitude(Point2) * cos(angle2 - inverseSlopeAngle) <= radius)
-				return true;
+		if (inverseSlopeAngle <= angle1 && inverseSlopeAngle >= angle2)
+		{
+			return (Utils::Magnitude(point1) * cosf(angle1 - inverseSlopeAngle)) <= radius;
 		}
 	}
 	return false;

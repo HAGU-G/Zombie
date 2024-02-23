@@ -40,8 +40,8 @@ void Bullet::Reset()
 
 void Bullet::Update(float dt)
 {
-	if (isStuckInWall)
-		Hit();
+	if (isStuckInWall) Hit();
+
 	prePos = position;
 
 	GameObject::Update(dt);

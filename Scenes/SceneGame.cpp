@@ -155,7 +155,7 @@ void SceneGame::Update(float dt)
 		doReset = true;
 	}
 
-	BulletCollision();
+
 
 	healthBar.setSize({ (float)player->hp,40.f });
 
@@ -164,14 +164,14 @@ void SceneGame::Update(float dt)
 
 void SceneGame::PostUpdate(float dt)
 {
-	zombieObjects.sort();
-
+	//zombieObjects.sort();
 }
 
 void SceneGame::LateUpdate(float dt)
 {
+	BulletCollision();
 	//오브젝트 삭제 (delete)
-	while (deleteDeque.size() > 0)
+ 	while (deleteDeque.size() > 0)
 	{
 		//필요한 정보를 미리 가져온다.
 		GameObject* temp = deleteDeque.front();

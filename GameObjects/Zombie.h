@@ -38,10 +38,6 @@ protected:
 
 	void Collision(float dt);
 
-	bool operator<(const Zombie& rhs)
-	{
-		return distanceToPlayer <= rhs.distanceToPlayer;
-	}
 
 public:
 	bool isDead = false;
@@ -60,5 +56,5 @@ public:
 
 	inline void SetPlayer(Player* p) { player = p; }
 	int Damaged(int damage);
-};
 
+};
