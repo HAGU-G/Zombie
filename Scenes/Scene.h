@@ -41,6 +41,8 @@ public:
 	virtual void Exit();
 
 	virtual void Update(float dt);
+	virtual void LateUpdate(float dt);
+	virtual void FixedUpdate(float dt);
 	virtual void Draw(sf::RenderWindow& window);
 
 	virtual GameObject* FindGo(const std::string& name, Layers layer = Layers::EveryThing);

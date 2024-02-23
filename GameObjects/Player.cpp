@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Player.h"
 #include "Bullet.h"
+#include "Bullet2.h"
 #include "SceneGame.h"
 #include "TileMap.h"
 
@@ -16,6 +17,7 @@ void Player::Init()
 	SetTexture(textureId);
 	SetOrigin(Origins::MC);
 
+	isFiring = false;
 }
 
 void Player::Release()
@@ -34,7 +36,7 @@ void Player::Reset()
 void Player::Update(float dt)
 {
 	SpriteGo::Update(dt);
-
+	shotTimer += dt;
 	//캐릭터 회전
 	sf::Vector2i mousePos = (sf::Vector2i)InputMgr::GetMousePos();
 	sf::Vector2f mouseWorldPos = SCENE_MGR.GetCurrentScene()->ScreenToWorld(mousePos);
@@ -71,11 +73,19 @@ void Player::Update(float dt)
 	//Shot
 	if (InputMgr::GetMouseButtonDown(sf::Mouse::Left))
 	{
-		Shot();
+		if (shotTimer >= shotInterval)
+		{
+			shotTimer = 0.f;
+			Shot();
+		}
 	}
 	if (InputMgr::GetMouseButton(sf::Mouse::Right))
 	{
-		Shot();
+		if (shotTimer >= shotInterval)
+		{
+			shotTimer = 0.f;
+			Shot();
+		}
 	}
 
 	if (hp == 0)
@@ -97,5 +107,7 @@ void Player::Damaged(int damage)
 void Player::Shot()
 {
 	dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrentScene())->CreateBullet(this);
-
+	//Bullet2* bullet = new Bullet2();
+	//bullet->Init();
+	//SCENE_MGR.GetCurrentScene()->AddGo(bullet)->SetPosition(position);
 }

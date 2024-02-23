@@ -93,6 +93,27 @@ void Scene::Update(float dt)
 	}
 
 
+
+}
+
+void Scene::LateUpdate(float dt)
+{
+	for (auto obj : gameObjects)
+	{
+		if (obj->GetActive())
+		{
+			obj->LateUpdate(dt);
+		}
+	}
+	for (auto obj : uiObjects)
+	{
+		if (obj->GetActive())
+		{
+			obj->LateUpdate(dt);
+		}
+	}
+
+
 	for (auto obj : sortList)
 	{
 		auto it = std::find(gameObjects.begin(), gameObjects.end(), obj);
@@ -111,8 +132,13 @@ void Scene::Update(float dt)
 		}
 	}
 	sortList.clear();
+
 }
 
+
+void Scene::FixedUpdate(float dt)
+{
+}
 
 void Scene::Draw(sf::RenderWindow& window)
 {

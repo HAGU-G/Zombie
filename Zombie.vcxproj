@@ -137,6 +137,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Bullet2.cpp" />
     <ClCompile Include="GameObjects\Effect\EffectBlood.cpp" />
     <ClCompile Include="GameObjects\UI\Crosshair.cpp" />
     <ClCompile Include="GameObjects\Bullet.cpp" />
@@ -169,6 +170,7 @@
     <ClCompile Include="Scenes\SceneTitle.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bullet2.h" />
     <ClInclude Include="GameObjects\Effect\EffectBlood.h" />
     <ClInclude Include="GameObjects\UI\Crosshair.h" />
     <ClInclude Include="GameObjects\Bullet.h" />

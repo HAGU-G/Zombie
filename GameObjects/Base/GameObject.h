@@ -63,6 +63,8 @@ public:
 	virtual void Release();
 	virtual void Reset();
 	virtual void Update(float dt);
+	virtual void LateUpdate(float dt);
+	virtual void FixedUpdate(float dt);
 	virtual void Draw(sf::RenderWindow& window);
 
 	bool GetActive() const { return active; }

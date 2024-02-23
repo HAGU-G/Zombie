@@ -10,7 +10,9 @@ protected:
 	sf::Vector2f look = { 1.f, 0.f };
 	std::pair<sf::Vector2f, sf::Vector2f> boundary;
 	
-	float damageInterval = 0.5f;
+	float shotInterval = 0.f;
+	float shotTimer = 0.f;
+	bool isFiring = false;
 
 	float speed = 600.f;
 

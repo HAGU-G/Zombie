@@ -236,8 +236,9 @@ void SceneGame::BulletCollision()
 			{
 				bullet->Hit();
 				score += zombie->Damaged(bullet->damage);
+
 				//아래는 체크용 지울것.
-				std::cout << score << std::endl;
+				//std::cout << score << std::endl;
 			}
 		}
 	}
