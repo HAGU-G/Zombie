@@ -86,6 +86,10 @@ void TileMap::Reset()
 void TileMap::Update(float dt)
 {
 	GameObject::Update(dt);
+
+	//테스트코드
+	//auto bounds = GetGlobalBoundsT();
+	//std::cout << bounds.left << " " << bounds.top << " : " << bounds.width << " " << bounds.height << std::endl;;
 }
 
 void TileMap::Draw(sf::RenderWindow& window)
@@ -183,4 +187,18 @@ void TileMap::SetFlipY(bool flip)
 {
 	GameObject::SetFlipY(flip);
 	UpdateTransform();
+}
+
+sf::FloatRect TileMap::GetLocalBoundsT() const
+{
+	sf::FloatRect bounds = va.getBounds();
+	bounds.left = origin.x;
+	bounds.top = origin.y;
+	return bounds;
+}
+
+sf::FloatRect TileMap::GetGlobalBoundsT() const
+{
+	sf::FloatRect bounds = va.getBounds();
+	return transform.transformRect(bounds);
 }

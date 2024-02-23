@@ -13,13 +13,20 @@ class SceneGame : public Scene
 protected:
 	Player* player;
 	std::vector<ZombieSpawner*> spawners;
-	bool doReset = false;
-	std::pair<sf::Vector2f, sf::Vector2f> boundary;
+
+	int score = 0;
 	sf::RectangleShape healthBar;
+	std::pair<sf::Vector2f, sf::Vector2f> boundary;
+
+	bool doReset = false;
 
 	void BulletCollision();
 
 public:
+	sf::Vector2f ClampByTileMap(const sf::Vector2f& point);
+
+
+
 	SceneGame(SceneIds id);
 	~SceneGame() override = default;
 

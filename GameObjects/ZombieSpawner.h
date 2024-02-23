@@ -12,6 +12,10 @@ protected:
 	float radius = 250.f;
 
 	float timer = 0.f;
+
+	std::pair<sf::Vector2f, sf::Vector2f> boundary;
+
+
 public:
 	ZombieSpawner(const std::string& name = "");
 	~ZombieSpawner()override =default;

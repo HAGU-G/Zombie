@@ -149,15 +149,16 @@ void Zombie::Collision(float dt)
 	distanceToPlayer = Utils::Distance(player->GetPosition(), GetPosition());
 }
 
-void Zombie::Damaged(int damage)
+int Zombie::Damaged(int damage)
 {
-
+	int preHp = hp;
 	hp -= damage;
-	if (hp <= 0)
+	if (hp <= 0 && !isDead)
 	{
+		hp = 0;
 		isDead = true;
 		SCENE_MGR.GetCurrentScene()->AddGo(new EffectBlood(this->position))->Init();
 		SCENE_MGR.GetCurrentScene()->DeleteGo(this);
 	}
-
+	return preHp - hp;
 }

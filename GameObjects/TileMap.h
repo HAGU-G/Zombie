@@ -46,5 +46,7 @@ public:
 	void SetFlipX(bool flip) override;
 	void SetFlipY(bool flip) override;
 
+	sf::FloatRect GetLocalBoundsT() const;
+	sf::FloatRect GetGlobalBoundsT() const;
 };
 

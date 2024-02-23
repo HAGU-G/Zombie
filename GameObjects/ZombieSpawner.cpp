@@ -26,14 +26,18 @@ void ZombieSpawner::Reset()
 	zombieTypes.push_back(Zombie::Types::Crawler);
 	zombieTypes.push_back(Zombie::Types::Chaser);
 
-	interval = 100000.f; //주기
+	interval = 1.f; //주기
 	spawnCount = 1;
 	radius = 250.f;
-	timer = 100000.f;
+	timer = 1.f;
+	boundary = dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrentScene())->GetBoundary();
+
 }
 
 void ZombieSpawner::Update(float dt)
 {
+
+
 	GameObject::Update(dt);
 	timer += dt;
 	if (timer > interval)
@@ -43,6 +47,16 @@ void ZombieSpawner::Update(float dt)
 		{
 			sf::Vector2f pos = position + Utils::RandomInUnitCircle() * radius;
 			Zombie::Types zombieType = zombieTypes[Utils::RandomRange(0, zombieTypes.size())];
+
+			if (pos.x < boundary.first.x)
+				Utils::ElasticCollision(pos.x, boundary.first.x, 0.f);
+			if (pos.x > boundary.second.x)
+				Utils::ElasticCollision(pos.x, boundary.second.x, 0.f);
+			if (pos.y < boundary.first.y)
+				Utils::ElasticCollision(pos.y, boundary.first.y, 0.f);
+			if (pos.y > boundary.second.y)
+				Utils::ElasticCollision(pos.y, boundary.second.y, 0.f);
+
 			dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrentScene())->CreateZombie(zombieType)->SetPosition(pos);
 
 		}

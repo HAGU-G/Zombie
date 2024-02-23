@@ -72,13 +72,13 @@
     <ClCompile Include="GameObjects\UI\HealthBar.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="SceneTitle.cpp">
+    <ClCompile Include="Scenes\SceneTitle.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Item.cpp">
+    <ClCompile Include="GameObjects\Item.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="EffectBlood.cpp">
+    <ClCompile Include="GameObjects\Effect\EffectBlood.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -146,13 +146,13 @@
     <ClInclude Include="GameObjects\UI\HealthBar.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="SceneTitle.h">
+    <ClInclude Include="Scenes\SceneTitle.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Item.h">
+    <ClInclude Include="GameObjects\Item.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="EffectBlood.h">
+    <ClInclude Include="GameObjects\Effect\EffectBlood.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

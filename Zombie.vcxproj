@@ -109,7 +109,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>.;.\SFML-2.6.1\include;.\Framework;.\GameObjects\Base;.\GameObjects\UI;.\GameObjects;.\Scenes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\GameObjects\Effect;.;.\SFML-2.6.1\include;.\Framework;.\GameObjects\Base;.\GameObjects\UI;.\GameObjects;.\Scenes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
@@ -137,7 +137,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="EffectBlood.cpp" />
+    <ClCompile Include="GameObjects\Effect\EffectBlood.cpp" />
     <ClCompile Include="GameObjects\UI\Crosshair.cpp" />
     <ClCompile Include="GameObjects\Bullet.cpp" />
     <ClCompile Include="Framework\Framework.cpp" />
@@ -151,7 +151,7 @@
     <ClCompile Include="GameObjects\Base\GameObject.cpp" />
     <ClCompile Include="GameObjects\ZombieSpawner.cpp" />
     <ClCompile Include="GameObjects\UI\HealthBar.cpp" />
-    <ClCompile Include="Item.cpp" />
+    <ClCompile Include="GameObjects\Item.cpp" />
     <ClCompile Include="main.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
@@ -166,10 +166,10 @@
     <ClCompile Include="GameObjects\Base\TextGo.cpp" />
     <ClCompile Include="GameObjects\TileMap.cpp" />
     <ClCompile Include="GameObjects\Zombie.cpp" />
-    <ClCompile Include="SceneTitle.cpp" />
+    <ClCompile Include="Scenes\SceneTitle.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="EffectBlood.h" />
+    <ClInclude Include="GameObjects\Effect\EffectBlood.h" />
     <ClInclude Include="GameObjects\UI\Crosshair.h" />
     <ClInclude Include="GameObjects\Bullet.h" />
     <ClInclude Include="Framework\Framework.h" />
@@ -181,7 +181,7 @@
     <ClInclude Include="Framework\Utils.h" />
     <ClInclude Include="GameObjects\Base\GameObject.h" />
     <ClInclude Include="GameObjects\UI\HealthBar.h" />
-    <ClInclude Include="Item.h" />
+    <ClInclude Include="GameObjects\Item.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="GameObjects\Player.h" />
     <ClInclude Include="Scenes\SceneGame.h" />
@@ -192,7 +192,7 @@
     <ClInclude Include="GameObjects\TileMap.h" />
     <ClInclude Include="GameObjects\Zombie.h" />
     <ClInclude Include="GameObjects\ZombieSpawner.h" />
-    <ClInclude Include="SceneTitle.h" />
+    <ClInclude Include="Scenes\SceneTitle.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

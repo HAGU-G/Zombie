@@ -85,6 +85,7 @@ void SceneGame::Enter()
 	tileMap->SetPosition(centerPos);
 	tileMap->SetOrigin(Origins::MC);
 	//tileMap->SetRotation(45);
+	//tileMap->SetScale({ 2.f,2.f });
 	tileMap->UpdateTransform();
 	boundary = tileMap->GetBoundary();
 
@@ -227,17 +228,25 @@ void SceneGame::BulletCollision()
 {
 	for (auto zombie : zombieObjects)
 	{
-		if (!zombie->isDead)
+		if (zombie->isDead)
 			continue;
 		for (auto bullet : bullets)
 		{
 			if (!zombie->isDead && !bullet->isHit && Utils::IsCollideWithLineSegment(zombie->GetPosition(), bullet->GetPosition(), bullet->prePos, zombie->GetGlobalBounds().width / 3.f))
 			{
 				bullet->Hit();
-				zombie->Damaged(bullet->damage);
+				score += zombie->Damaged(bullet->damage);
+				//아래는 체크용 지울것.
+				std::cout << score << std::endl;
 			}
 		}
-
 	}
+}
 
+sf::Vector2f SceneGame::ClampByTileMap(const sf::Vector2f& point)
+{
+	sf::FloatRect rect = tileMap->GetGlobalBounds();
+	rect = Utils::ResizeRect(rect, tileMap->GetCellSize() * -2.f);
+
+	return Utils::Clamp();
 }

@@ -54,6 +54,6 @@ public:
 
 
 	inline void SetPlayer(Player* p) { player = p; }
-	void Damaged(int damage);
+	int Damaged(int damage);
 };
 

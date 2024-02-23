@@ -9,7 +9,7 @@ void Framework::Init(int width, int height, const std::string& name)
     windowSize.y = height;
 
     window.create(sf::VideoMode(windowSize.x, windowSize.y), name);
-    //window.setFramerateLimit(30);
+    window.setFramerateLimit(15);
 
     InputMgr::Init();
     SCENE_MGR.Init();

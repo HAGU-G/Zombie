@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "Bullet.h"
 #include "SceneGame.h"
+#include "TileMap.h"
 
 Player::Player(const std::string& name) : SpriteGo(name)
 {
@@ -26,6 +27,8 @@ void Player::Reset()
 {
 	SpriteGo::Reset();
 	active = true;
+
+	tileMap = dynamic_cast<TileMap*>(SCENE_MGR.GetCurrentScene()->FindGo("Background"));
 }
 
 void Player::Update(float dt)
@@ -51,7 +54,8 @@ void Player::Update(float dt)
 	sf::Vector2f tempPos(GetPosition() + direction * speed * dt);
 
 	//충돌 검사
-	std::pair<sf::Vector2f, sf::Vector2f> boundary= dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrentScene())->GetBoundary();
+	boundary = dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrentScene())->GetBoundary();
+	// 
 	//충돌 검사: 벽
 	if (tempPos.x < boundary.first.x)
 		Utils::ElasticCollision(tempPos.x, boundary.first.x, 0.f);
