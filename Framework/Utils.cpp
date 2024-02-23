@@ -185,12 +185,12 @@ bool Utils::IsCollideWithLineSegment(const sf::Vector2f& p1, const sf::Vector2f&
 	}
 	//좌표계 원점 변환
 	sf::Vector2f point1 = tempP1 - p1;
-	sf::Vector2f point2 = tempP2 - p1;
+	sf::Vector2f point2 = tempP2 - p1; 
 	sf::Vector2f slopePoint = point1 - point2;
 	//선분이 유효한지 검사
-	float inverseSlopeAngle = slopePoint.x == 0.f ? 90.f : Utils::RadianToDegree(acosf(Utils::Magnitude(slopePoint) / -slopePoint.x));
-	float angle1 = point1.x == 0.f ? 90.f : Utils::RadianToDegree(acosf(Utils::Magnitude(point1) / point1.x));
-	float angle2 = point2.x == 0.f ? 90.f : Utils::RadianToDegree(acosf(Utils::Magnitude(point2) / point2.x));
+	float inverseSlopeAngle = slopePoint.x == 0.f ? 90.f : Utils::RadianToDegree(acosf(-slopePoint.x/Utils::Magnitude(slopePoint)));
+	float angle1 = point1.x == 0.f ? 90.f : Utils::RadianToDegree(acosf(point1.x/Utils::Magnitude(point1)));
+	float angle2 = point2.x == 0.f ? 90.f : Utils::RadianToDegree(acosf( point2.x/Utils::Magnitude(point2) ));
 
 	if (angle2 > angle1)
 	{
@@ -202,20 +202,27 @@ bool Utils::IsCollideWithLineSegment(const sf::Vector2f& p1, const sf::Vector2f&
 		point1 = point2;
 		point2 = tempPoint;
 	}
-	if ((point1.y < 0 && point2.y>0) || (point1.y > 0 && point2.y < 0))
+	if ((point1.y < 0 && point2.y>=0) || (point1.y >= 0 && point2.y < 0))
 	{
-		if (inverseSlopeAngle >= angle1 || inverseSlopeAngle <= angle2
-			&& Utils::Magnitude(point1) * cos(Utils::DegreeToRadian(angle1 - inverseSlopeAngle)) <= radius)
+		std::cout << "상하 ";
+		std::cout << Utils::Magnitude(point1) * abs(cos(Utils::DegreeToRadian(inverseSlopeAngle - angle1))) << " "
+			<< Utils::Magnitude(point2) * abs(cos(Utils::DegreeToRadian(angle2 - inverseSlopeAngle))) << " " << radius << " :: ";
+		if (inverseSlopeAngle >= angle1 && Utils::Magnitude(point1) * abs(cos(Utils::DegreeToRadian(inverseSlopeAngle - angle1))) <= radius)
+		{
+			
+			return true;
+		}
+		if (inverseSlopeAngle <= angle2 && Utils::Magnitude(point2) * abs(cos(Utils::DegreeToRadian(angle2-inverseSlopeAngle))) <= radius)
 		{
 			return true;
 		}
 	}
 	else if (inverseSlopeAngle <= angle1 && inverseSlopeAngle >= angle2
-		&& Utils::Magnitude(point1) * cos(Utils::DegreeToRadian(angle1 - inverseSlopeAngle)) <= radius)
+		&& Utils::Magnitude(point1) * abs(cos(Utils::DegreeToRadian(angle1 - inverseSlopeAngle))) <= radius)
 	{
 		return true;
 	}
 
-	std::cout << angle1 << " " << angle2 << " : 각" << std::endl;
+	std::cout << angle1 << " " << angle2 << " : " << inverseSlopeAngle << std::endl;
 	return false;
 }

@@ -243,10 +243,10 @@ void SceneGame::BulletCollision()
 	}
 }
 
-sf::Vector2f SceneGame::ClampByTileMap(const sf::Vector2f& point)
-{
-	sf::FloatRect rect = tileMap->GetGlobalBounds();
-	rect = Utils::ResizeRect(rect, tileMap->GetCellSize() * -2.f);
-
-	return Utils::Clamp();
-}
+//sf::Vector2f SceneGame::ClampByTileMap(const sf::Vector2f& point)
+//{
+//	sf::FloatRect rect = tileMap->GetGlobalBounds();
+//	rect = Utils::ResizeRect(rect, tileMap->GetCellSize() * -2.f);
+//
+//	return Utils::Clamp();
+//}

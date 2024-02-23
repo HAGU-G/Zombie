@@ -40,6 +40,8 @@ void Bullet::Reset()
 
 void Bullet::Update(float dt)
 {
+	if (isStuckInWall)
+		Hit();
 	prePos = position;
 
 	GameObject::Update(dt);
@@ -52,25 +54,25 @@ void Bullet::Update(float dt)
 	{
 		position.y -= (position.x - boundary.first.x) * tan(Utils::DegreeToRadian(Utils::Angle(direction)));
 		Utils::ElasticCollision(position.x, boundary.first.x, 0.f);
-		Hit();
+		isStuckInWall = true;
 	}
 	if (position.x > boundary.second.x)
 	{
 		position.y -= (position.x - boundary.second.x) * tan(Utils::DegreeToRadian(Utils::Angle(direction)));
 		Utils::ElasticCollision(position.x, boundary.second.x, 0.f);
-		Hit();
+		isStuckInWall = true;
 	}
 	if (position.y < boundary.first.y)
 	{
 		position.x -= (position.y - boundary.first.y) * (1 / tan(Utils::DegreeToRadian(Utils::Angle(direction))));
 		Utils::ElasticCollision(position.y, boundary.first.y, 0.f);
-		Hit();
+		isStuckInWall = true;
 	}
 	if (position.y > boundary.second.y)
 	{
 		position.x -= (position.y - boundary.second.y) * (1 / tan(Utils::DegreeToRadian(Utils::Angle(direction))));
 		Utils::ElasticCollision(position.y, boundary.second.y, 0.f);
-		Hit();
+		isStuckInWall = true;
 	}
 
 	//ÃÑ¾Ë ÈçÀû

@@ -23,7 +23,7 @@ protected:
 	void BulletCollision();
 
 public:
-	sf::Vector2f ClampByTileMap(const sf::Vector2f& point);
+	//sf::Vector2f ClampByTileMap(const sf::Vector2f& point);
 
 
 

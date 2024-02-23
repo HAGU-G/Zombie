@@ -9,6 +9,7 @@ protected:
     sf::Vector2f direction;
     float speed;
     float displacement = 0.f; //움직인 거리
+    float isStuckInWall = false;
 
 
 public:
