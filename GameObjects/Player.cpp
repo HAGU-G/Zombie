@@ -37,6 +37,7 @@ void Player::Update(float dt)
 {
 	SpriteGo::Update(dt);
 	shotTimer += dt;
+	damagedTimer += dt;
 	//캐릭터 회전
 	sf::Vector2i mousePos = (sf::Vector2i)InputMgr::GetMousePos();
 	sf::Vector2f mouseWorldPos = SCENE_MGR.GetCurrentScene()->ScreenToWorld(mousePos);
@@ -88,6 +89,7 @@ void Player::Update(float dt)
 		}
 	}
 
+	//죽음
 	if (hp == 0)
 	{
 		active = false;
@@ -101,13 +103,19 @@ void Player::Draw(sf::RenderWindow& window)
 
 void Player::Damaged(int damage)
 {
-	hp = std::max(hp - damage, 0);
+	if (damagedTimer >= damagedInterval)
+	{
+		damagedTimer = 0.f;
+		hp = std::max(hp - damage, 0);
+	}
 }
+
 
 void Player::Shot()
 {
 	dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrentScene())->CreateBullet(this);
 	//Bullet2* bullet = new Bullet2();
 	//bullet->Init();
+	//bullet->Fire(direction, 150.f);
 	//SCENE_MGR.GetCurrentScene()->AddGo(bullet)->SetPosition(position);
 }

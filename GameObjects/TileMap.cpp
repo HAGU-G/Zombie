@@ -87,14 +87,10 @@ void TileMap::Update(float dt)
 {
 	GameObject::Update(dt);
 
-	//테스트코드
-	//auto bounds = GetGlobalBoundsT();
-	//std::cout << bounds.left << " " << bounds.top << " : " << bounds.width << " " << bounds.height << std::endl;;
 }
 
 void TileMap::Draw(sf::RenderWindow& window)
 {
-	//GameObject::Draw(window);
 	sf::RenderStates state;
 	state.texture = texture;
 	state.transform = transform;
@@ -112,7 +108,6 @@ void TileMap::SetOrigin(Origins preset)
 	origin.x = bound.width * ((int)originPreset % 3) * 0.5f;
 	origin.y = bound.height * ((int)originPreset % 3) * 0.5f;
 
-	//sf::Vector2f newOrigin(bound.width, bound.height);
 	UpdateTransform();
 }
 
@@ -146,12 +141,6 @@ void TileMap::SetPosition(const sf::Vector2f& pos)
 {
 	GameObject::SetPosition(pos);
 	UpdateTransform();
-	//sf::Vector2f delta = pos - position;
-	//for (int i = 0; i < va.getVertexCount(); i++)
-	//{
-	//	va[i].position += delta;
-	//	position = pos;
-	//}
 }
 
 void TileMap::SetScale(const sf::Vector2f& scale)
@@ -160,15 +149,6 @@ void TileMap::SetScale(const sf::Vector2f& scale)
 	GameObject::SetScale(scale);
 	UpdateTransform();
 
-
-	//this->scale = scale;
-	//float x0 = origin.x*this->scale.x;
-	//float y0 = origin.y * this->scale.y;
-	//for (int i = 0; i < va.getVertexCount(); i++)
-	//{
-	//	va[i].position.x += (va[i].position.x - x0) * (this->scale.x - 1.f)/2;
-	//	va[i].position.y += (va[i].position.y - y0) * (this->scale.y - 1.f)/2;
-	//}
 }
 
 void TileMap::SetRotation(float r)

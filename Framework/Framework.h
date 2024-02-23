@@ -16,6 +16,7 @@ protected:
 
 	sf::Vector2i windowSize;
 	RenderWindowRBR window;
+	float fixedInterval = 1.f/60.f;
 
 	sf::Clock clock;
 	float timeScale = 1.f;
@@ -25,6 +26,8 @@ protected:
 
 	sf::Time realDeltaTime;
 	sf::Time deltaTime;
+
+	sf::Time fixedDeltaTime;
 
 	bool isFocus = true;
 

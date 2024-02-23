@@ -166,61 +166,85 @@ float Utils::GetElasticCollision(float coord, float border, float cor)
 
 bool Utils::IsCollideWithLineSegment(const sf::Vector2f& p1, const sf::Vector2f& lineP1, const sf::Vector2f& lineP2, float radius)
 {
-	//점과의 거리부터 검사
+	//두 점과의 거리 검사
 	if (Magnitude(lineP1 - p1) <= radius || Magnitude(lineP2 - p1) <= radius)
 		return true;
 
-	//계산을 위해 선분의 점들을 검사
-	sf::Vector2f tempP1;
-	sf::Vector2f tempP2;
-	if (lineP1.y < 0.f && lineP2.y < 0.f)
-	{
-		tempP1 = lineP1.y < lineP2.y ? lineP1 : lineP2;
-		tempP2 = lineP1.y < lineP2.y ? lineP2 : lineP1;
-	}
-	else
-	{
-		tempP1 = lineP1.y > lineP2.y ? lineP1 : lineP2;
-		tempP2 = lineP1.y > lineP2.y ? lineP2 : lineP1;
-	}
-	//좌표계 원점 변환
-	sf::Vector2f point1 = tempP1 - p1;
-	sf::Vector2f point2 = tempP2 - p1;
-	sf::Vector2f slopePoint = point1 - point2;
-	//각도 설정
-	float inverseSlopeAngle = slopePoint.x == 0.f ? 90.f : acosf(-slopePoint.x / Utils::Magnitude(slopePoint));
-	float angle1 = point1.x == 0.f ? 90.f : acosf(point1.x / Utils::Magnitude(point1));
-	float angle2 = point2.x == 0.f ? 90.f : acosf(point2.x / Utils::Magnitude(point2));
-	//점 재설정
+	//좌표계 원점 변환, 기준점 설정
+	sf::Vector2f Point1 = lineP1.y < lineP2.y ? lineP1 - p1 : lineP2 - p1;
+	sf::Vector2f Point2 = lineP1.y < lineP2.y ? lineP2 - p1 : lineP1 - p1;
+
+	float angle1 = acosf(Point1.x / Utils::Magnitude(Point1));
+	float angle2 = acosf(Point2.x / Utils::Magnitude(Point2));
+	if (Point1.y < 0)
+		angle1 = 2.f * M_PI - angle1;
+	if (Point2.y < 0)
+		angle2 = 2.f * M_PI - angle2;
 	if (angle2 > angle1)
 	{
-		float tempAngle = angle1;
+		float temp = angle1;
 		angle1 = angle2;
-		angle2 = tempAngle;
+		angle2 = temp;
 
-		sf::Vector2f tempPoint = point1;
-		point1 = point2;
-		point2 = tempPoint;
+		sf::Vector2f temp2 = Point1;
+		Point1 = Point2;
+		Point2 = temp2;
 	}
-	//검사
-	if ((point1.y < 0.f && point2.y >= 0.f) || (point1.y >= 0.f && point2.y < 0.f))
+	sf::Vector2f inverseSlopePoint = { (Point1 - Point2).y, -(Point1 - Point2).x };
+	float inverseSlopeAngle = acosf(inverseSlopePoint.x / Utils::Magnitude(inverseSlopePoint));
+	if (inverseSlopePoint.y < 0)
+		inverseSlopeAngle = 2.f * M_PI - inverseSlopeAngle;
+
+	//선분과 닿을 수 있는 각도인지 검사
+	bool check1 = false;
+	if (angle1 - angle2 > M_PI && (inverseSlopeAngle >= angle1 || inverseSlopeAngle <= angle2))
 	{
-		if (inverseSlopeAngle >= angle1)
-		{
-			if (Utils::Magnitude(point1) * cos(abs(inverseSlopeAngle - angle1)) <= radius)
-				return true;
-		}
-		if (inverseSlopeAngle <= angle2)
-		{
-			if (Utils::Magnitude(point2) * cos(abs(angle2 - inverseSlopeAngle)) <= radius)
-				return true;
-		}
+		check1 = true;
+
+		float temp = angle1;
+		angle1 = angle2;
+		angle2 = temp;
+
+		sf::Vector2f temp2 = Point1;
+		Point1 = Point2;
+		Point2 = temp2;
 	}
 	else if (inverseSlopeAngle <= angle1 && inverseSlopeAngle >= angle2)
 	{
-		if (Utils::Magnitude(point1) * cos(abs(angle1 - inverseSlopeAngle)) <= radius)
+		check1 = true;
+	}
+
+	//선분과의 거리 검사
+	if (check1)
+	{
+		if (Point1.y * Point2.y >= 0)
 		{
-			return true;
+			if (angle1 > M_PI)
+				angle1 = 2.f * M_PI - angle1;
+			if (inverseSlopeAngle > M_PI)
+				inverseSlopeAngle = 2.f * M_PI - inverseSlopeAngle;
+
+			if (Utils::Magnitude(Point1) * cos(angle1 - inverseSlopeAngle) <= radius)
+				return true;
+		}
+		else if (Point1.x * Point2.x >= 0 || inverseSlopeAngle <= M_PI_2 || (inverseSlopeAngle >= M_PI && inverseSlopeAngle <= M_PI + M_PI_2))
+		{
+			angle1 = asinf(Point1.y / Utils::Magnitude(Point1));
+			angle2 = asinf(Point2.y / Utils::Magnitude(Point2));
+			inverseSlopeAngle = asinf(inverseSlopePoint.y / Utils::Magnitude(inverseSlopePoint));
+
+			if (Utils::Magnitude(Point2) * cos(angle2 - inverseSlopeAngle) <= radius)
+				return true;
+		}
+		else if (inverseSlopeAngle >= M_PI + M_PI_2 || (inverseSlopeAngle >= M_PI_2 && inverseSlopeAngle <= M_PI))
+		{
+			if (angle2 > M_PI)
+				angle2 = 2.f * M_PI - angle2;
+			if (inverseSlopeAngle > M_PI)
+				inverseSlopeAngle = 2.f * M_PI - inverseSlopeAngle;
+
+			if (Utils::Magnitude(Point2) * cos(angle2 - inverseSlopeAngle) <= radius)
+				return true;
 		}
 	}
 	return false;

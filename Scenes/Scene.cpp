@@ -138,6 +138,20 @@ void Scene::LateUpdate(float dt)
 
 void Scene::FixedUpdate(float dt)
 {
+	for (auto obj : gameObjects)
+	{
+		if (obj->GetActive())
+		{
+			obj->FixedUpdate(dt);
+		}
+	}
+	for (auto obj : uiObjects)
+	{
+		if (obj->GetActive())
+		{
+			obj->FixedUpdate(dt);
+		}
+	}
 }
 
 void Scene::Draw(sf::RenderWindow& window)

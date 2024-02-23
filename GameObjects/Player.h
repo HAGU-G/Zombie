@@ -11,10 +11,14 @@ protected:
 	std::pair<sf::Vector2f, sf::Vector2f> boundary;
 	
 	float shotInterval = 0.f;
+	float damagedInterval = 0.4f;
+	float damagedTimer = 0.f;
+
 	float shotTimer = 0.f;
 	bool isFiring = false;
 
 	float speed = 600.f;
+	int damage = 34;
 
 	TileMap* tileMap;
 	std::string textureId = "graphics/player.png";

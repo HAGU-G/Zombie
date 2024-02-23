@@ -25,6 +25,8 @@ void Framework::Do()
         time += deltaTime;
         realTime += realDeltaTime;
 
+        fixedDeltaTime += deltaTime;
+
         InputMgr::Clear();
         sf::Event event;
         while (window.pollEvent(event))
@@ -37,6 +39,12 @@ void Framework::Do()
 
 
         SCENE_MGR.Update(GetDT());
+        SCENE_MGR.LateUpdate(GetDT());
+        if (fixedDeltaTime.asSeconds() >= fixedInterval)
+        {
+            SCENE_MGR.FixedUpdate(fixedDeltaTime.asSeconds());
+            fixedDeltaTime = sf::Time::Zero;
+        }
         window.clear();
         SCENE_MGR.Draw(window);
         window.display();

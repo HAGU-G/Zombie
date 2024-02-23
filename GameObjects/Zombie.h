@@ -38,6 +38,10 @@ protected:
 
 	void Collision(float dt);
 
+	bool operator<(const Zombie& rhs)
+	{
+		return distanceToPlayer <= rhs.distanceToPlayer;
+	}
 
 public:
 	bool isDead = false;
@@ -49,6 +53,7 @@ public:
 	void Release() override;
 	void Reset() override;
 	void Update(float dt) override;
+	void FixedUpdate(float dt) override;
 	void Draw(sf::RenderWindow& window) override;
 	inline float GetDistanceToPlayer() const { return distanceToPlayer; }
 

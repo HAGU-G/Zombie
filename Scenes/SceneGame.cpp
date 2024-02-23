@@ -21,11 +21,11 @@ void SceneGame::Init()
 	AddGo(new TileMap("Background"));
 
 	//좀비 스포너
-	//spawners.push_back(new ZombieSpawner());
+	spawners.push_back(new ZombieSpawner());
 	spawners.push_back(new ZombieSpawner());
 	for (auto s : spawners)
 	{
-		s->SetPosition(Utils::RandomOnUnitCircle() * 250.f);
+		s->SetPosition({ Utils::RandomRange(0.f,(float)FRAMEWORK.GetWindowSize().x),Utils::RandomRange(0.f,(float)FRAMEWORK.GetWindowSize().y)});
 		AddGo(s);
 	}
 
@@ -101,6 +101,8 @@ void SceneGame::Exit()
 
 void SceneGame::Update(float dt)
 {
+	//findGoAll("Zombie",zombieList,Layer::World); FixedUpdate에서도 설정
+
 	Scene::Update(dt);
 	TileMap* tileMap = dynamic_cast<TileMap*>(FindGo("Background"));
 
@@ -161,6 +163,12 @@ void SceneGame::Update(float dt)
 }
 
 void SceneGame::PostUpdate(float dt)
+{
+	zombieObjects.sort();
+
+}
+
+void SceneGame::LateUpdate(float dt)
 {
 	//오브젝트 삭제 (delete)
 	while (deleteDeque.size() > 0)
@@ -236,9 +244,6 @@ void SceneGame::BulletCollision()
 			{
 				bullet->Hit();
 				score += zombie->Damaged(bullet->damage);
-
-				//아래는 체크용 지울것.
-				//std::cout << score << std::endl;
 			}
 		}
 	}

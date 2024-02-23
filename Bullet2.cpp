@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Bullet2.h"
 #include "SceneGame.h"
+#include "Zombie.h"
 
 Bullet2::Bullet2(const std::string& name)
 :SpriteGo(name)
@@ -8,7 +9,7 @@ Bullet2::Bullet2(const std::string& name)
 
 }
 
-void Bullet2::Fire(const sf::Vector2f& dir, float s)
+void Bullet2::Fire(const sf::Vector2f& dir, float s, int d)
 {
 	direction = dir;
 	speed = s;
@@ -22,7 +23,8 @@ void Bullet2::Init()
 	textureId = "graphics/bullet.png";
 	SetTexture(textureId);
 	SetOrigin(Origins::ML);
-
+	sceneGame = dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrentScene());
+	position = dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrentScene())->GetPlayer()->GetPosition();
 }
 
 void Bullet2::Reset()
@@ -33,7 +35,8 @@ void Bullet2::Reset()
 
 void Bullet2::Update(float dt)
 {
-	SpriteGo::Update(dt);
+	
+ 	SpriteGo::Update(dt);
 	SetPosition(position + direction * speed * dt);
 	//충돌 검사
 	std::pair<sf::Vector2f, sf::Vector2f> boundary = dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrentScene())->GetBoundary();
@@ -59,4 +62,23 @@ void Bullet2::Update(float dt)
 		Utils::ElasticCollision(position.y, boundary.second.y, 0.f);
 	}
 	SetPosition(position);
+}
+
+void Bullet2::FixedUpdate(float dt)
+{
+	//리스트는 좀비 리스트에서 가져오도록 변경
+	//std::list<GameObject*> list;
+	//sceneGame->FindGoAll("Zombie", list, Scene::Layers::World);
+
+	//for (auto zombie : list)
+	//{
+	//	if (GetGlobalBounds().intersects(dynamic_cast<Zombie*>(zombie)->GetGlobalBounds()))
+	//	{
+	//		SetActive(true);
+	//		zombie->SetActive(false);
+
+	//		sceneGame->RemoveGo(this);
+	//		sceneGame->RemoveGo(zombie);
+	//	}
+	//}
 }

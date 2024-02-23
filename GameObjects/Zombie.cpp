@@ -13,7 +13,7 @@ Zombie::Zombie(const std::string& name)
 
 Zombie* Zombie::Create(Types zombieType)
 {
-	Zombie* zombie = new Zombie();
+	Zombie* zombie = new Zombie("Zombie");
 	zombie->type = zombieType;
 
 
@@ -101,7 +101,15 @@ void Zombie::Update(float dt)
 
 	direction = player->GetPosition() - position;
 
-	if (atkTimer >=atkInterval && distanceToPlayer <= sprite.getGlobalBounds().width * 3.8f / 10.f)
+
+}
+
+void Zombie::FixedUpdate(float dt)
+{
+
+	distanceToPlayer = Utils::Distance(player->GetPosition(), position);
+	SpriteGo::FixedUpdate(dt);
+	if (atkTimer >= atkInterval && distanceToPlayer <= sprite.getGlobalBounds().width * 3.8f / 10.f)
 	{
 		player->Damaged(atkDamage);
 		atkTimer = 0.f;
@@ -146,18 +154,17 @@ void Zombie::Collision(float dt)
 	SetPosition(tempPos);
 	rotation = Utils::Angle(player->GetPosition() - GetPosition());
 	SetRotation(rotation);
-	distanceToPlayer = Utils::Distance(player->GetPosition(), GetPosition());
 }
 
 int Zombie::Damaged(int damage)
 {
 	int preHp = hp;
 	hp -= damage;
+	SCENE_MGR.GetCurrentScene()->AddGo(new EffectBlood(this->position))->Init();
 	if (hp <= 0 && !isDead)
 	{
 		hp = 0;
 		isDead = true;
-		SCENE_MGR.GetCurrentScene()->AddGo(new EffectBlood(this->position))->Init();
 		SCENE_MGR.GetCurrentScene()->DeleteGo(this);
 	}
 	return preHp - hp;

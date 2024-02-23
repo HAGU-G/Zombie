@@ -17,11 +17,12 @@ public:
 	Bullet2(const std::string& name="bullet2");
 	~Bullet2() override = default;
 
-	void Fire(const sf::Vector2f& dir, float s);
+	void Fire(const sf::Vector2f& dir, float s, int d);
 
 
 	void Init() override;
 	void Reset() override;
 	void Update(float dt) override;
+	void FixedUpdate(float dt)override;
 };
 

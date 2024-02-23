@@ -7,6 +7,7 @@
 class ZombieSpawner;
 class Player;
 class Bullet;
+class TileMap;
 
 class SceneGame : public Scene
 {
@@ -38,19 +39,24 @@ public:
 
 	void Update(float dt) override;
 	void PostUpdate(float dt);
+	void LateUpdate(float dt) override;
 
 	void Draw(sf::RenderWindow& window) override;
 
 	inline Player* GetPlayer() { return player; }
 	inline const std::pair<sf::Vector2f, sf::Vector2f>& GetBoundary() const { return boundary; }
 
-	std::list<Zombie*> zombieObjects;
 	Zombie* CreateZombie(Zombie::Types zombieType);
 
 	std::list<Bullet*> bullets;
 	Bullet* CreateBullet(Player* player);
 
 	Item* CreateItem(Item::Types itemType);
+
+
+
+	std::list<Zombie*> zombieObjects;
+
 
 };
 

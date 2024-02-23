@@ -26,10 +26,10 @@ void ZombieSpawner::Reset()
 	zombieTypes.push_back(Zombie::Types::Crawler);
 	zombieTypes.push_back(Zombie::Types::Chaser);
 
-	interval = 1000.f; //주기
+	interval = 2.f; //주기
 	spawnCount = 1;
 	radius = 250.f;
-	timer = 1000.f;
+	timer = 0.f;
 	boundary = dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrentScene())->GetBoundary();
 
 }
@@ -43,6 +43,7 @@ void ZombieSpawner::Update(float dt)
 	if (timer > interval)
 	{
 		timer = 0.f;
+		boundary = dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrentScene())->GetBoundary();
 		for (int i = 0; i < spawnCount; ++i)
 		{
 			sf::Vector2f pos = position + Utils::RandomInUnitCircle() * radius;
