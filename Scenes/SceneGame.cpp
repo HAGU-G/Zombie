@@ -36,11 +36,11 @@ void SceneGame::Init()
 	//UI
 	AddGo(new Crosshair(), Scene::Ui);
 
-	healthBar.setSize({(float)player->maxHp,40});
+	healthBar.setSize({ (float)player->maxHp,40 });
 	healthBar.setFillColor(sf::Color::Red);
 	Utils::SetOrigin(healthBar, Origins::BC);
 	healthBar.setPosition({ FRAMEWORK.GetWindow().mapPixelToCoords(FRAMEWORK.GetWindowSize(),uiView).x * 0.5f
-		, FRAMEWORK.GetWindow().mapPixelToCoords(FRAMEWORK.GetWindowSize(), uiView).y * 0.9f});
+		, FRAMEWORK.GetWindow().mapPixelToCoords(FRAMEWORK.GetWindowSize(), uiView).y * 0.9f });
 
 
 
@@ -228,16 +228,16 @@ void SceneGame::BulletCollision()
 	for (auto zombie : zombieObjects)
 	{
 		if (!zombie->isDead)
+			continue;
+		for (auto bullet : bullets)
 		{
-			for (auto bullet : bullets)
+			if (!zombie->isDead && !bullet->isHit && Utils::IsCollideWithLineSegment(zombie->GetPosition(), bullet->GetPosition(), bullet->prePos, zombie->GetGlobalBounds().width / 3.f))
 			{
-				if (!zombie->isDead && !bullet->isHit && Utils::IsCollideWithLineSegment(zombie->GetPosition(), bullet->GetPosition(), bullet->prePos, zombie->GetGlobalBounds().width / 3.f))
-				{
-					bullet->Hit();
-					zombie->Damaged(bullet->damage);
-				}
+				bullet->Hit();
+				zombie->Damaged(bullet->damage);
 			}
 		}
+
 	}
 
 }

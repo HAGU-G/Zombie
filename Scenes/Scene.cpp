@@ -144,9 +144,7 @@ GameObject* Scene::FindGo(const std::string& name, Layers layer)
 		for (auto obj : gameObjects)
 		{
 			if (obj->name == name)
-			{
 				return obj;
-			}
 		}
 	}
 	if ((layer & Layers::Ui) == Layers::Ui)
@@ -154,11 +152,11 @@ GameObject* Scene::FindGo(const std::string& name, Layers layer)
 		for (auto obj : uiObjects)
 		{
 			if (obj->name == name)
-			{
 				return obj;
-			}
 		}
 	}
+	return nullptr;
+
 }
 int Scene::FindGoAll(const std::string& name, std::list<GameObject*>& list, Layers layer)
 {
