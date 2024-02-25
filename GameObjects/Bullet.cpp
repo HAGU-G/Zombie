@@ -8,7 +8,7 @@ Bullet::Bullet(const sf::Vector2f& position, const std::string& name)
 {
 	sortLayer = 4;
 	tag = 1;
-	shape.setSize({ 3.f, 2.f });
+	shape.setSize({ 3.f, 3.f });
 	shape.setFillColor(sf::Color::Yellow);
 	Utils::SetOrigin(shape, Origins::MR);
 
@@ -78,7 +78,7 @@ void Bullet::Update(float dt)
 	//ÃÑ¾Ë ÈçÀû
 	shape.setPosition(position);
 	float distance = Utils::Distance(prePos, position);
-	shape.setScale({ 1.f + distance / 3,1.f });
+	shape.setScale({ distance / 3.f,1.f });
 
 }
 

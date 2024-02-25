@@ -21,7 +21,7 @@ protected:
 
 	bool doReset = false;
 
-	void BulletCollision();
+	void BulletCollision(float dt);
 
 public:
 	//sf::Vector2f ClampByTileMap(const sf::Vector2f& point);

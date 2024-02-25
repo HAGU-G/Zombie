@@ -169,7 +169,7 @@ void SceneGame::PostUpdate(float dt)
 
 void SceneGame::LateUpdate(float dt)
 {
-	BulletCollision();
+	BulletCollision(dt);
 	//오브젝트 삭제 (delete)
  	while (deleteDeque.size() > 0)
 	{
@@ -232,7 +232,7 @@ Item* SceneGame::CreateItem(Item::Types itemType)
 	return i;
 }
 
-void SceneGame::BulletCollision()
+void SceneGame::BulletCollision(float dt)
 {
 	for (auto zombie : zombieObjects)
 	{
@@ -244,6 +244,7 @@ void SceneGame::BulletCollision()
 			{
 				bullet->Hit();
 				score += zombie->Damaged(bullet->damage);
+				zombie->SetPosition(zombie->GetPosition()+zombie->GetDirection()*-1.f*500.f*dt);
 			}
 		}
 	}

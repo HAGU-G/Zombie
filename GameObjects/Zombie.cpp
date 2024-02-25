@@ -100,7 +100,7 @@ void Zombie::Update(float dt)
 	Collision(dt);
 
 	direction = player->GetPosition() - position;
-
+	Utils::Normalize(direction);
 
 }
 
