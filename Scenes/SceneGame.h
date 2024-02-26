@@ -4,16 +4,16 @@
 #include "Item.h"
 
 
-class ZombieSpawner;
 class Player;
 class Bullet;
 class TileMap;
+class Spawner;
 
 class SceneGame : public Scene
 {
 protected:
 	Player* player;
-	std::vector<ZombieSpawner*> spawners;
+	std::vector<Spawner*> spawners;
 
 	int score = 0;
 	sf::RectangleShape healthBar;
@@ -40,6 +40,7 @@ public:
 	void Update(float dt) override;
 	void PostUpdate(float dt);
 	void LateUpdate(float dt) override;
+	void FixedUpdate(float dt) override;
 
 	void Draw(sf::RenderWindow& window) override;
 

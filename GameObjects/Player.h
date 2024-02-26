@@ -2,6 +2,7 @@
 #include "SpriteGo.h"
 
 class TileMap;
+class Item2;
 
 class Player : public SpriteGo
 {
@@ -19,6 +20,8 @@ protected:
 
 	float speed = 600.f;
 	int damage = 34;
+	int maxAmmo = 26;
+	int ammo = maxAmmo;
 
 	TileMap* tileMap;
 	std::string textureId = "graphics/player.png";
@@ -36,7 +39,9 @@ public:
 	void Update(float dt) override;
 	void Draw(sf::RenderWindow& window) override;
 
-	void Damaged(int damage);
+	void onDamage(int damage);
 	void Shot();
+	void onDie();
+	void onItem(Item2* item);
 };
 

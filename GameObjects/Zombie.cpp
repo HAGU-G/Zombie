@@ -111,7 +111,7 @@ void Zombie::FixedUpdate(float dt)
 	SpriteGo::FixedUpdate(dt);
 	if (atkTimer >= atkInterval && distanceToPlayer <= sprite.getGlobalBounds().width * 3.8f / 10.f)
 	{
-		player->Damaged(atkDamage);
+		player->onDamage(atkDamage);
 		atkTimer = 0.f;
 	}
 }

@@ -4,6 +4,7 @@
 #include "Bullet2.h"
 #include "SceneGame.h"
 #include "TileMap.h"
+#include "Item2.h"
 
 Player::Player(const std::string& name) : SpriteGo(name)
 {
@@ -31,6 +32,8 @@ void Player::Reset()
 	active = true;
 
 	tileMap = dynamic_cast<TileMap*>(SCENE_MGR.GetCurrentScene()->FindGo("Background"));
+
+	ammo = maxAmmo;
 }
 
 void Player::Update(float dt)
@@ -92,7 +95,7 @@ void Player::Update(float dt)
 	//Á×À½
 	if (hp == 0)
 	{
-		active = false;
+		onDie();
 	}
 }
 
@@ -101,7 +104,7 @@ void Player::Draw(sf::RenderWindow& window)
 	SpriteGo::Draw(window);
 }
 
-void Player::Damaged(int damage)
+void Player::onDamage(int damage)
 {
 	if (damagedTimer >= damagedInterval)
 	{
@@ -113,9 +116,30 @@ void Player::Damaged(int damage)
 
 void Player::Shot()
 {
-	dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrentScene())->CreateBullet(this);
-	//Bullet2* bullet = new Bullet2();
+	if (ammo > 0)
+	{
+		ammo--;
+		dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrentScene())->CreateBullet(this);
+	}//Bullet2* bullet = new Bullet2();
 	//bullet->Init();
 	//bullet->Fire(direction, 150.f);
 	//SCENE_MGR.GetCurrentScene()->AddGo(bullet)->SetPosition(position);
+}
+
+void Player::onDie()
+{
+	active = false;
+}
+
+void Player::onItem(Item2* item)
+{
+	switch (item->GetType())
+	{
+	case Item2::Types::AMMO:
+		ammo += item->GetValue();
+		break;
+	case Item2::Types::HEALTH:
+		hp += item->GetValue();
+		break;
+	}
 }

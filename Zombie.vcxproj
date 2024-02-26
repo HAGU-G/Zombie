@@ -138,6 +138,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Bullet2.cpp" />
+    <ClCompile Include="DebugString.cpp" />
     <ClCompile Include="GameObjects\Effect\EffectBlood.cpp" />
     <ClCompile Include="GameObjects\UI\Crosshair.cpp" />
     <ClCompile Include="GameObjects\Bullet.cpp" />
@@ -153,6 +154,8 @@
     <ClCompile Include="GameObjects\ZombieSpawner.cpp" />
     <ClCompile Include="GameObjects\UI\HealthBar.cpp" />
     <ClCompile Include="GameObjects\Item.cpp" />
+    <ClCompile Include="Item2.cpp" />
+    <ClCompile Include="ItemSpawner.cpp" />
     <ClCompile Include="main.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
@@ -168,9 +171,11 @@
     <ClCompile Include="GameObjects\TileMap.cpp" />
     <ClCompile Include="GameObjects\Zombie.cpp" />
     <ClCompile Include="Scenes\SceneTitle.cpp" />
+    <ClCompile Include="Spawner.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bullet2.h" />
+    <ClInclude Include="DebugString.h" />
     <ClInclude Include="GameObjects\Effect\EffectBlood.h" />
     <ClInclude Include="GameObjects\UI\Crosshair.h" />
     <ClInclude Include="GameObjects\Bullet.h" />
@@ -184,6 +189,8 @@
     <ClInclude Include="GameObjects\Base\GameObject.h" />
     <ClInclude Include="GameObjects\UI\HealthBar.h" />
     <ClInclude Include="GameObjects\Item.h" />
+    <ClInclude Include="Item2.h" />
+    <ClInclude Include="ItemSpawner.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="GameObjects\Player.h" />
     <ClInclude Include="Scenes\SceneGame.h" />
@@ -195,6 +202,7 @@
     <ClInclude Include="GameObjects\Zombie.h" />
     <ClInclude Include="GameObjects\ZombieSpawner.h" />
     <ClInclude Include="Scenes\SceneTitle.h" />
+    <ClInclude Include="Spawner.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

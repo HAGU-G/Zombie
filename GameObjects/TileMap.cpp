@@ -70,7 +70,7 @@ void TileMap::Init()
 	GameObject::Init();
 	SetSpriteSheetId("graphics/background_sheet.png");
 	//50x50
-	Set({ 20, 10 }, { 50.f, 50.f });
+	Set({ 20, 20 }, { 50.f, 50.f });
 }
 
 void TileMap::Release()

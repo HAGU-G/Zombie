@@ -4,6 +4,7 @@
 #include "TileMap.h"
 #include "Zombie.h"
 #include "ZombieSpawner.h"
+#include "ItemSpawner.h"
 #include "Bullet.h"
 #include "Crosshair.h"
 #include "Item.h"
@@ -22,10 +23,17 @@ void SceneGame::Init()
 
 	//좀비 스포너
 	spawners.push_back(new ZombieSpawner());
-	spawners.push_back(new ZombieSpawner());
+	spawners.push_back(new ItemSpawner());
 	for (auto s : spawners)
 	{
-		s->SetPosition({ Utils::RandomRange(0.f,(float)FRAMEWORK.GetWindowSize().x),Utils::RandomRange(0.f,(float)FRAMEWORK.GetWindowSize().y)});
+		if (s->name == "ItemSpawner")
+		{
+			s->SetPosition({ FRAMEWORK.GetWindowSize().x * 0.5f, FRAMEWORK.GetWindowSize().y * 0.5f });
+		}
+		else if(s->name == "ZombieSpawner")
+		{
+			s->SetPosition({ Utils::RandomRange(0.f,(float)FRAMEWORK.GetWindowSize().x),Utils::RandomRange(0.f,(float)FRAMEWORK.GetWindowSize().y)});
+		}
 		AddGo(s);
 	}
 
@@ -169,7 +177,8 @@ void SceneGame::PostUpdate(float dt)
 
 void SceneGame::LateUpdate(float dt)
 {
-	BulletCollision(dt);
+	Scene::LateUpdate(dt);
+
 	//오브젝트 삭제 (delete)
  	while (deleteDeque.size() > 0)
 	{
@@ -195,6 +204,12 @@ void SceneGame::LateUpdate(float dt)
 	}
 }
 
+void SceneGame::FixedUpdate(float dt)
+{
+	Scene::FixedUpdate(dt);
+	BulletCollision(dt);
+}
+
 void SceneGame::Draw(sf::RenderWindow& window)
 {
 	Scene::Draw(window);
@@ -208,7 +223,6 @@ Zombie* SceneGame::CreateZombie(Zombie::Types zombieType)
 	z->Init();
 	z->Reset();
 	z->SetPlayer(player);
-	AddGo(z);
 	zombieObjects.push_back(z);
 	return z;
 }
@@ -244,7 +258,7 @@ void SceneGame::BulletCollision(float dt)
 			{
 				bullet->Hit();
 				score += zombie->Damaged(bullet->damage);
-				zombie->SetPosition(zombie->GetPosition()+zombie->GetDirection()*-1.f*500.f*dt);
+				zombie->SetPosition(zombie->GetPosition()+zombie->GetDirection()*-1.f*5.f);
 			}
 		}
 	}

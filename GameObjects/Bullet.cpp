@@ -75,7 +75,7 @@ void Bullet::Update(float dt)
 		isStuckInWall = true;
 	}
 
-	//ÃÑ¾Ë ÈçÀû
+	//ÃÑ¾Ë ±ËÀû
 	shape.setPosition(position);
 	float distance = Utils::Distance(prePos, position);
 	shape.setScale({ distance / 3.f,1.f });
