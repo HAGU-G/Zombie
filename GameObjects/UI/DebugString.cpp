@@ -60,8 +60,8 @@ void DebugString::FixedUpdate(float dt)
 void DebugString::Draw(sf::RenderWindow& window)
 {
 	GameObject::Draw(window);
-	//window.draw(a);
-	//window.draw(b);
-	//window.draw(c);
-	//window.draw(d);
+	window.draw(a);
+	window.draw(b);
+	window.draw(c);
+	window.draw(d);
 }

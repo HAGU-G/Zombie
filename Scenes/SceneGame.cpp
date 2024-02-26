@@ -91,7 +91,6 @@ void SceneGame::Release()
 
 void SceneGame::Enter()
 {
-
 	FRAMEWORK.GetWindow().setMouseCursorVisible(false);
 	Scene::Enter();
 

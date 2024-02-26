@@ -159,6 +159,7 @@ void Player::Shot()
 void Player::onDie()
 {
 	active = false;
+	SOUND_MGR.PlayBGM("sound/SellBuyMusic2.wav");
 }
 
 void Player::onItem(Item2* item)

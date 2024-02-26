@@ -18,6 +18,8 @@ void SoundMgr::Init(int totalChannels)
 	{
 		waiting.push_back(new sf::Sound());
 	}
+	bgm[frontBGMIndex].setVolume(bgmVolume);
+	bgm[backBGMIndex].setVolume(bgmVolume);
 
 }
 
@@ -50,8 +52,6 @@ void SoundMgr::Update(float dt)
 		DownVolumeBGM(10.f);
 	}
 
-
-
 	auto it = playing.begin();
 	while (it != playing.end())
 	{
@@ -65,6 +65,12 @@ void SoundMgr::Update(float dt)
 			it++;
 		}
 	}
+
+	if (isFading)
+	{
+		MixingBGM(dt);
+	}
+
 
 }
 
@@ -88,7 +94,8 @@ void SoundMgr::PlayBGM(const std::string& id, bool crossFade, bool loop)
 
 		int temp = frontBGMIndex;
 		frontBGMIndex = backBGMIndex;
-		backBGMIndex = frontBGMIndex;
+		backBGMIndex = temp;
+		isFading = true;
 	}
 }
 
@@ -106,9 +113,39 @@ void SoundMgr::PlaySfx(const std::string& id, bool loop)
 	PlaySfx(RES_MGR_SOUND_BUFFER.Get(id), loop);
 }
 
+
+
 void SoundMgr::MixingBGM(float dt)
 {
+	//크로스 페이드 도중 페이드 시간이 변해도 초기값을 유지하기 위한 변수
+	static float fadeDu = fadeDuration;
+
+	//증감 속도를 각자 설정 (동시에 목표 볼륨에 도달하기 위함)
+	if (fadeTimer == 0.f)
+	{
+		frontMixingSpeed = bgmVolume - bgm[frontBGMIndex].getVolume();
+		backMixingSpeed = 0.0f - bgm[backBGMIndex].getVolume();
+		fadeDu = fadeDuration;
+	}
+
+	//크로스 페이드
+	float frontVol = bgm[frontBGMIndex].getVolume() + frontMixingSpeed * dt / fadeDu;
+	float backVol = bgm[backBGMIndex].getVolume() + backMixingSpeed * dt / fadeDu;
+	bgm[frontBGMIndex].setVolume(frontVol >= bgmVolume ? bgmVolume : frontVol);
+	bgm[backBGMIndex].setVolume(backVol <= 0.f ? 0.f : backVol);
+
+	//크로스 페이드 종료
+	fadeTimer += dt;
+	if (fadeTimer >= fadeDuration)
+	{
+		fadeTimer = 0.f;
+		bgm[backBGMIndex].stop();
+		isFading = false;
+	}
+
 }
+
+
 
 void SoundMgr::PlaySfx(sf::SoundBuffer& buffer, bool loop)
 {
@@ -177,16 +214,22 @@ void SoundMgr::SetVolumeBGM(float value)
 		bgmVolume = value;
 	}
 
-	bgm[frontBGMIndex].setVolume(bgmVolume);
+
 	if (!isFading)
 	{
-
+		bgm[frontBGMIndex].setVolume(bgmVolume);
 		bgm[backBGMIndex].setVolume(bgmVolume);
 	}
 	else
 	{
-		float v = bgm[backBGMIndex].getVolume() * (preBgmVol == 0.f ? 0.f : (bgmVolume / preBgmVol));
-		bgm[backBGMIndex].setVolume(v >= 100.f ? 100.f : v);
+		float frontVol = bgm[frontBGMIndex].getVolume() * (preBgmVol == 0.f ? 0.f : (bgmVolume / preBgmVol));
+		bgm[frontBGMIndex].setVolume(frontVol >= 100.f ? 100.f : frontVol);
+		frontMixingSpeed *= preBgmVol == 0.f ? 0.f : (bgmVolume / preBgmVol);
+
+		float backVol = bgm[backBGMIndex].getVolume() * (preBgmVol == 0.f ? 0.f : (bgmVolume / preBgmVol));
+		bgm[backBGMIndex].setVolume(backVol >= 100.f ? 100.f : backVol);
+		backMixingSpeed *= preBgmVol == 0.f ? 0.f : (bgmVolume / preBgmVol);
+
 	}
 
 }
