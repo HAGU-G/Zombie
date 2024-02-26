@@ -24,3 +24,9 @@ void SceneTitle::Update(float dt)
 		SCENE_MGR.ChangeScene(SceneIds::SceneGame);
 	}
 }
+
+void SceneTitle::Enter()
+{
+	Scene::Enter();
+	SOUND_MGR.PlayBGM("sound/SellBuyMusic1.wav");
+}

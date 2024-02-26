@@ -9,7 +9,9 @@ public:
 	SceneTitle(SceneIds id);
 	~SceneTitle() override = default;
 
-	virtual void Init();
-	virtual void Update(float dt);
+	void Init() override;
+	void Update(float dt) override;
+	void Enter() override;
+
 };
 

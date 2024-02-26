@@ -39,8 +39,16 @@ public:
 	void PlaySfx(sf::SoundBuffer& buffer, bool loop = false);
 	void StopAllSfx();
 
-	void SetVolumeSfx();
-	void SetVolumeBGM();
+
+	//0.0f ~ 100.f
+	void SetVolumeSfx(float value);
+	//0.0f ~ 100.f
+	void SetVolumeBGM(float value);
+	void UpVolumeBGM(float value);
+	void DownVolumeBGM(float value);
+
+	size_t GetPlayingCount() { return playing.size(); }
+	size_t GetWaitingCount() { return waiting.size(); }
 
 };
 
