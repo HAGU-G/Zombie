@@ -32,7 +32,7 @@ GameObject* ItemSpawner::Create()
 	{
 
 	case Item2::Types::AMMO:
-		val = Utils::RandomRange(5, 15);
+		val = Utils::RandomRange(20, 40);
 		break;
 	case Item2::Types::HEALTH:
 		val = Utils::RandomRange(10, 30);

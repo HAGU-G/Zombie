@@ -4,12 +4,22 @@ class Crosshair : public SpriteGo
 {
 public:
 	Crosshair(const std::string& name = "crosshair");
-	~Crosshair() = default;
+	~Crosshair() override = default;
 
-	virtual void Init();
-	virtual void Release();
-	virtual void Reset();
-	virtual void Update(float dt);
-	virtual void Draw(sf::RenderWindow& window);
+	void Init();
+	void Release();
+	void Reset();
+	void Update(float dt);
+	void Draw(sf::RenderWindow& window);
+
+
+
+	sf::Vector2f defaultScale;
+	float defaultRotation;
+	float motionSpeed = 2.f;
+
+	void MotionUpdate(float dt);
+	void MotionReload();
+	void MotionShot();
 };
 

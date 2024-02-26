@@ -8,15 +8,20 @@ class Player;
 class Bullet;
 class TileMap;
 class Spawner;
+class UIHUD;
+class Crosshair;
 
 class SceneGame : public Scene
 {
 protected:
 	Player* player;
+	UIHUD* hud;
+
 	std::vector<Spawner*> spawners;
 
 	int score = 0;
-	sf::RectangleShape healthBar;
+	int hiScore = 0;
+	int wave = 0;
 	std::pair<sf::Vector2f, sf::Vector2f> boundary;
 
 	bool doReset = false;
@@ -25,7 +30,7 @@ protected:
 
 public:
 	//sf::Vector2f ClampByTileMap(const sf::Vector2f& point);
-
+	Crosshair* crosshair;
 
 
 	SceneGame(SceneIds id);

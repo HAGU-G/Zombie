@@ -8,6 +8,8 @@
 #include "Bullet.h"
 #include "Crosshair.h"
 #include "Item.h"
+#include "DebugString.h"
+#include "UIHUD.h"
 
 SceneGame::SceneGame(SceneIds id)
 	:Scene(id)
@@ -17,6 +19,21 @@ SceneGame::SceneGame(SceneIds id)
 void SceneGame::Init()
 {
 	Release();
+
+	//UI
+	crosshair = dynamic_cast<Crosshair*>(AddGo(new Crosshair(), Scene::Ui));
+
+	hud = dynamic_cast<UIHUD*>(AddGo(new UIHUD(), Scene::Ui));
+
+	AddGo(new DebugString(), Scene::Ui);
+
+	//기존HP
+	//healthBar.setSize({ (float)player->maxHp,40 });
+	//healthBar.setFillColor(sf::Color::Red);
+	//Utils::SetOrigin(healthBar, Origins::BC);
+	//healthBar.setPosition({ FRAMEWORK.GetWindow().mapPixelToCoords(FRAMEWORK.GetWindowSize(),uiView).x * 0.5f
+	//	, FRAMEWORK.GetWindow().mapPixelToCoords(FRAMEWORK.GetWindowSize(), uiView).y * 0.95f });
+
 
 	//배경
 	AddGo(new TileMap("Background"));
@@ -30,9 +47,9 @@ void SceneGame::Init()
 		{
 			s->SetPosition({ FRAMEWORK.GetWindowSize().x * 0.5f, FRAMEWORK.GetWindowSize().y * 0.5f });
 		}
-		else if(s->name == "ZombieSpawner")
+		else if (s->name == "ZombieSpawner")
 		{
-			s->SetPosition({ Utils::RandomRange(0.f,(float)FRAMEWORK.GetWindowSize().x),Utils::RandomRange(0.f,(float)FRAMEWORK.GetWindowSize().y)});
+			s->SetPosition({ Utils::RandomRange(0.f,(float)FRAMEWORK.GetWindowSize().x),Utils::RandomRange(0.f,(float)FRAMEWORK.GetWindowSize().y) });
 		}
 		AddGo(s);
 	}
@@ -41,18 +58,13 @@ void SceneGame::Init()
 	player = new Player("Player");
 	AddGo(player);
 
-	//UI
-	AddGo(new Crosshair(), Scene::Ui);
-
-	healthBar.setSize({ (float)player->maxHp,40 });
-	healthBar.setFillColor(sf::Color::Red);
-	Utils::SetOrigin(healthBar, Origins::BC);
-	healthBar.setPosition({ FRAMEWORK.GetWindow().mapPixelToCoords(FRAMEWORK.GetWindowSize(),uiView).x * 0.5f
-		, FRAMEWORK.GetWindow().mapPixelToCoords(FRAMEWORK.GetWindowSize(), uiView).y * 0.9f });
-
-
-
 	Scene::Init();
+
+	hud->SetScore(score);
+	hud->SetHiScore(hiScore);
+	hud->SetAmmo(0, 0);
+	hud->SetWave(wave);
+	hud->SetZombieCount(zombieObjects.size());
 }
 
 void SceneGame::Release()
@@ -74,6 +86,7 @@ void SceneGame::Release()
 	}
 	bullets.clear();
 	player = nullptr;
+	score = hiScore = 0;
 }
 
 void SceneGame::Enter()
@@ -165,7 +178,6 @@ void SceneGame::Update(float dt)
 
 
 
-	healthBar.setSize({ (float)player->hp,40.f });
 
 	PostUpdate(dt);
 }
@@ -173,6 +185,9 @@ void SceneGame::Update(float dt)
 void SceneGame::PostUpdate(float dt)
 {
 	//zombieObjects.sort();
+
+
+
 }
 
 void SceneGame::LateUpdate(float dt)
@@ -180,7 +195,7 @@ void SceneGame::LateUpdate(float dt)
 	Scene::LateUpdate(dt);
 
 	//오브젝트 삭제 (delete)
- 	while (deleteDeque.size() > 0)
+	while (deleteDeque.size() > 0)
 	{
 		//필요한 정보를 미리 가져온다.
 		GameObject* temp = deleteDeque.front();
@@ -202,6 +217,7 @@ void SceneGame::LateUpdate(float dt)
 		Init();
 		Enter();
 	}
+	hud->SetZombieCount(zombieObjects.size());
 }
 
 void SceneGame::FixedUpdate(float dt)
@@ -213,7 +229,6 @@ void SceneGame::FixedUpdate(float dt)
 void SceneGame::Draw(sf::RenderWindow& window)
 {
 	Scene::Draw(window);
-	window.draw(healthBar);
 }
 
 
@@ -258,7 +273,9 @@ void SceneGame::BulletCollision(float dt)
 			{
 				bullet->Hit();
 				score += zombie->Damaged(bullet->damage);
-				zombie->SetPosition(zombie->GetPosition()+zombie->GetDirection()*-1.f*5.f);
+				hud->SetScore(score);
+				hud->SetHiScore(hiScore = std::max(score, hiScore));
+				zombie->SetPosition(zombie->GetPosition() + zombie->GetDirection() * -1.f * 5.f);
 			}
 		}
 	}

@@ -78,7 +78,7 @@ void Bullet::Update(float dt)
 	//ÃÑ¾Ë ±ËÀû
 	shape.setPosition(position);
 	float distance = Utils::Distance(prePos, position);
-	shape.setScale({ distance / 3.f,1.f });
+	shape.setScale({std::max(1.f,distance / 3.f),1.f });
 
 }
 

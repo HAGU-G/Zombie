@@ -84,16 +84,19 @@
     <ClCompile Include="Bullet2.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Item2.cpp">
+    <ClCompile Include="GameObjects\Item2.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Spawner.cpp">
+    <ClCompile Include="GameObjects\Spawner.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="DebugString.cpp">
+    <ClCompile Include="GameObjects\UI\DebugString.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="ItemSpawner.cpp">
+    <ClCompile Include="GameObjects\ItemSpawner.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjects\UI\UIHUD.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -173,16 +176,19 @@
     <ClInclude Include="Bullet2.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Item2.h">
+    <ClInclude Include="GameObjects\Item2.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Spawner.h">
+    <ClInclude Include="GameObjects\Spawner.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="DebugString.h">
+    <ClInclude Include="GameObjects\UI\DebugString.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="ItemSpawner.h">
+    <ClInclude Include="GameObjects\ItemSpawner.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjects\UI\UIHUD.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

@@ -11,6 +11,7 @@ EffectBlood::EffectBlood(sf::Vector2f pos, const std::string& name)
 void EffectBlood::Init()
 {
 	SpriteGo::Init();
+
 	SetTexture(textureId);
 	SetOrigin(Origins::MC);
 	SetPosition(position);
@@ -20,6 +21,7 @@ void EffectBlood::Init()
 void EffectBlood::Update(float dt)
 {
 	SpriteGo::Update(dt);
+
 	scale = {scale.x-0.1f* dt , scale.y - 0.1f * dt };
 	timer -= dt;
 	sprite.setScale(scale);

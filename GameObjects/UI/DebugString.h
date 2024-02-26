@@ -3,11 +3,19 @@
 
 class DebugString : public GameObject
 {
-protected:
 
-public:
+public:	
+	
+	sf::Text a;
+	sf::Text b;
+	sf::Text c;
+	sf::Text d;
+
+
+
 	DebugString(const std::string& name = "Debug");
 	~DebugString() override = default;
+
 
 	void Init() override;
 	void Release() override;

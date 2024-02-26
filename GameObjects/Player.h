@@ -3,6 +3,7 @@
 
 class TileMap;
 class Item2;
+class UIHUD;
 
 class Player : public SpriteGo
 {
@@ -11,7 +12,7 @@ protected:
 	sf::Vector2f look = { 1.f, 0.f };
 	std::pair<sf::Vector2f, sf::Vector2f> boundary;
 	
-	float shotInterval = 0.f;
+	float shotInterval = 0.05f;
 	float damagedInterval = 0.4f;
 	float damagedTimer = 0.f;
 
@@ -22,8 +23,10 @@ protected:
 	int damage = 34;
 	int maxAmmo = 26;
 	int ammo = maxAmmo;
+	int totalAmmo = ammo;
 
 	TileMap* tileMap;
+	UIHUD* hud;
 	std::string textureId = "graphics/player.png";
 
 public:

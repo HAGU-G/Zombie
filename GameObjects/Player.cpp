@@ -5,6 +5,8 @@
 #include "SceneGame.h"
 #include "TileMap.h"
 #include "Item2.h"
+#include "UIHUD.h"
+#include "Crosshair.h"
 
 Player::Player(const std::string& name) : SpriteGo(name)
 {
@@ -32,8 +34,12 @@ void Player::Reset()
 	active = true;
 
 	tileMap = dynamic_cast<TileMap*>(SCENE_MGR.GetCurrentScene()->FindGo("Background"));
+	hud = dynamic_cast<UIHUD*>(SCENE_MGR.GetCurrentScene()->FindGo("UIHUD"));
 
 	ammo = maxAmmo;
+	totalAmmo = ammo;
+	hud->SetAmmo(ammo, totalAmmo);
+	hud->SetHp(hp, maxHp);
 }
 
 void Player::Update(float dt)
@@ -91,6 +97,24 @@ void Player::Update(float dt)
 			Shot();
 		}
 	}
+	if (InputMgr::GetKeyDown(sf::Keyboard::R))
+	{
+			shotTimer = -1.f;
+			int needAmmo = maxAmmo - ammo;
+			if (totalAmmo >= needAmmo)
+			{
+				ammo += needAmmo;
+				totalAmmo -= needAmmo;
+				hud->SetAmmo(ammo, totalAmmo);
+			}
+			else
+			{
+				ammo += totalAmmo;
+				totalAmmo = 0;
+				hud->SetAmmo(ammo, totalAmmo);
+			}
+			dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrentScene())->crosshair->MotionReload();
+	}
 
 	//Á×À½
 	if (hp == 0)
@@ -110,6 +134,7 @@ void Player::onDamage(int damage)
 	{
 		damagedTimer = 0.f;
 		hp = std::max(hp - damage, 0);
+		hud->SetHp(hp, maxHp);
 	}
 }
 
@@ -119,7 +144,9 @@ void Player::Shot()
 	if (ammo > 0)
 	{
 		ammo--;
+		hud->SetAmmo(ammo, totalAmmo);
 		dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrentScene())->CreateBullet(this);
+		dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrentScene())->crosshair->MotionShot();
 	}//Bullet2* bullet = new Bullet2();
 	//bullet->Init();
 	//bullet->Fire(direction, 150.f);
@@ -136,10 +163,12 @@ void Player::onItem(Item2* item)
 	switch (item->GetType())
 	{
 	case Item2::Types::AMMO:
-		ammo += item->GetValue();
+		totalAmmo += item->GetValue();
+		hud->SetAmmo(ammo, totalAmmo);
 		break;
 	case Item2::Types::HEALTH:
-		hp += item->GetValue();
+		hp = std::min(hp+item->GetValue(),maxHp);
+		hud->SetHp(hp,maxHp);
 		break;
 	}
 }
