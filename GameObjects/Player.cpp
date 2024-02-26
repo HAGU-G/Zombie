@@ -99,27 +99,14 @@ void Player::Update(float dt)
 	}
 	if (InputMgr::GetKeyDown(sf::Keyboard::R))
 	{
-			shotTimer = -1.f;
-			int needAmmo = maxAmmo - ammo;
-			if (totalAmmo >= needAmmo)
-			{
-				ammo += needAmmo;
-				totalAmmo -= needAmmo;
-				hud->SetAmmo(ammo, totalAmmo);
-			}
-			else
-			{
-				ammo += totalAmmo;
-				totalAmmo = 0;
-				hud->SetAmmo(ammo, totalAmmo);
-			}
-			dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrentScene())->crosshair->MotionReload();
+		ReLoad();
 	}
 
 	//Á×À½
 	if (hp == 0)
 	{
 		onDie();
+		SOUND_MGR.PlaySfx("sound/splat.wav");
 	}
 }
 
@@ -135,6 +122,7 @@ void Player::onDamage(int damage)
 		damagedTimer = 0.f;
 		hp = std::max(hp - damage, 0);
 		hud->SetHp(hp, maxHp);
+		SOUND_MGR.PlaySfx("sound/hit.wav");
 	}
 }
 
@@ -149,11 +137,41 @@ void Player::Shot()
 		dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrentScene())->crosshair->MotionShot();
 		SOUND_MGR.PlaySfx("sound/shoot.wav");
 	}
-	
+	else
+	{
+		ReLoad();
+	}
 	//Bullet2* bullet = new Bullet2();
 	//bullet->Init();
 	//bullet->Fire(direction, 150.f);
 	//SCENE_MGR.GetCurrentScene()->AddGo(bullet)->SetPosition(position);
+}
+
+void Player::ReLoad()
+{
+	shotTimer = -0.5f;
+	int needAmmo = maxAmmo - ammo;
+	if (totalAmmo >= needAmmo)
+	{
+		ammo += needAmmo;
+		totalAmmo -= needAmmo;
+		hud->SetAmmo(ammo, totalAmmo);
+		SOUND_MGR.PlaySfx("sound/reload.wav");
+		dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrentScene())->crosshair->MotionReload();
+	}
+	else if (totalAmmo == 0)
+	{
+		SOUND_MGR.PlaySfx("sound/reload_failed.wav");
+	}
+	else
+	{
+		ammo += totalAmmo;
+		totalAmmo = 0;
+		hud->SetAmmo(ammo, totalAmmo);
+		SOUND_MGR.PlaySfx("sound/reload.wav");
+		dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrentScene())->crosshair->MotionReload();
+	}
+
 }
 
 void Player::onDie()
@@ -164,6 +182,7 @@ void Player::onDie()
 
 void Player::onItem(Item2* item)
 {
+	SOUND_MGR.PlaySfx("sound/pickup.wav");
 	switch (item->GetType())
 	{
 	case Item2::Types::AMMO:

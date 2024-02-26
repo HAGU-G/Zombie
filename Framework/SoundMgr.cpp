@@ -51,6 +51,15 @@ void SoundMgr::Update(float dt)
 	{
 		DownVolumeBGM(10.f);
 	}
+	if (InputMgr::GetKeyDown(sf::Keyboard::PageUp))
+	{
+		UpVolumeSfx(10.f);
+	}
+	if (InputMgr::GetKeyDown(sf::Keyboard::PageDown))
+	{
+		DownVolumeSfx(10.f);
+	}
+
 
 	auto it = playing.begin();
 	while (it != playing.end())
@@ -134,6 +143,13 @@ void SoundMgr::MixingBGM(float dt)
 	bgm[frontBGMIndex].setVolume(frontVol >= bgmVolume ? bgmVolume : frontVol);
 	bgm[backBGMIndex].setVolume(backVol <= 0.f ? 0.f : backVol);
 
+
+	//페이드가 끝나지 않았음에도 BGM을 전환시킬 때 사용..?
+	//bgm을 배열이 아닌 list같은 컨테이너로 만들면 가능할 듯함.
+	/*if (bgm[backBGMIndex].getVolume() == 0.f)
+		bgm[backBGMIndex].stop();*/
+
+
 	//크로스 페이드 종료
 	fadeTimer += dt;
 	if (fadeTimer >= fadeDuration)
@@ -196,6 +212,16 @@ void SoundMgr::SetVolumeSfx(float value)
 		sfxVolume = value;
 	}
 
+}
+
+void SoundMgr::UpVolumeSfx(float value)
+{
+	SetVolumeSfx(sfxVolume + value);
+}
+
+void SoundMgr::DownVolumeSfx(float value)
+{
+	SetVolumeSfx(sfxVolume - value);
 }
 
 void SoundMgr::SetVolumeBGM(float value)

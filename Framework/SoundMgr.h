@@ -15,7 +15,7 @@ private:
 	int backBGMIndex = 1;
 
 	bool isFading = false;
-	float fadeDuration = 5.f;
+	float fadeDuration = 2.f;
 	float fadeTimer = 0.f;
 	float frontMixingSpeed = 0.f;
 	float backMixingSpeed = 0.f;
@@ -46,6 +46,8 @@ public:
 
 	//0.0f ~ 100.f
 	void SetVolumeSfx(float value);
+	void UpVolumeSfx(float value);
+	void DownVolumeSfx(float value);
 	//0.0f ~ 100.f
 	void SetVolumeBGM(float value);
 	void UpVolumeBGM(float value);

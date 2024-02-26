@@ -53,7 +53,7 @@ void Crosshair::MotionUpdate(float dt)
 	}
 	if (rotation != defaultRotation)
 	{
-		rotation = std::max(0.f,rotation - 180.f*dt);
+		rotation = std::max(0.f,rotation - 360.f*dt);
 		doUpdate = true;
 	}
 

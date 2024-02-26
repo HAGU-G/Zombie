@@ -19,7 +19,7 @@ void SceneTitle::Update(float dt)
 {
 	Scene::Update(dt);
 
-	if (InputMgr::AnyKeyDown())
+	if (InputMgr::GetKeyDown(sf::Keyboard::Enter))
 	{
 		SCENE_MGR.ChangeScene(SceneIds::SceneGame);
 	}

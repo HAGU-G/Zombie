@@ -55,7 +55,7 @@ public:
 
 
 	inline void SetPlayer(Player* p) { player = p; }
-	int Damaged(int damage);
+	bool Damaged(int damage);
 	const sf::Vector2f& GetDirection() const { return direction; };
 
 };

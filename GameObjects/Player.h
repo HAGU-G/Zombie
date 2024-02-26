@@ -19,7 +19,7 @@ protected:
 	float shotTimer = 0.f;
 	bool isFiring = false;
 
-	float speed = 600.f;
+	float speed = 300.f;
 	int damage = 34;
 	int maxAmmo = 26;
 	int ammo = maxAmmo;
@@ -44,6 +44,7 @@ public:
 
 	void onDamage(int damage);
 	void Shot();
+	void ReLoad();
 	void onDie();
 	void onItem(Item2* item);
 };

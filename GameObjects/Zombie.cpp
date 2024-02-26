@@ -156,7 +156,7 @@ void Zombie::Collision(float dt)
 	SetRotation(rotation);
 }
 
-int Zombie::Damaged(int damage)
+bool Zombie::Damaged(int damage)
 {
 	int preHp = hp;
 	hp -= damage;
@@ -166,6 +166,7 @@ int Zombie::Damaged(int damage)
 		hp = 0;
 		isDead = true;
 		SCENE_MGR.GetCurrentScene()->DeleteGo(this);
+		SOUND_MGR.PlaySfx("sound/splat.wav");
 	}
-	return preHp - hp;
+	return isDead;
 }

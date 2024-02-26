@@ -12,7 +12,7 @@
 #include "UIHUD.h"
 
 SceneGame::SceneGame(SceneIds id)
-	:Scene(id)
+	:Scene(id), player(nullptr), hud(nullptr), tileMap(nullptr)
 {
 }
 
@@ -36,7 +36,7 @@ void SceneGame::Init()
 
 
 	//배경
-	AddGo(new TileMap("Background"));
+	tileMap = dynamic_cast<TileMap*>(AddGo(new TileMap("Background")));
 
 	//좀비 스포너
 	spawners.push_back(new ZombieSpawner());
@@ -49,7 +49,7 @@ void SceneGame::Init()
 		}
 		else if (s->name == "ZombieSpawner")
 		{
-			s->SetPosition({ Utils::RandomRange(0.f,(float)FRAMEWORK.GetWindowSize().x),Utils::RandomRange(0.f,(float)FRAMEWORK.GetWindowSize().y) });
+			s->SetPosition({ Utils::RandomRange(boundary.first.x,boundary.second.x),Utils::RandomRange(boundary.first.y,boundary.second.y) });
 		}
 		AddGo(s);
 	}
@@ -64,7 +64,7 @@ void SceneGame::Init()
 	hud->SetHiScore(hiScore);
 	hud->SetAmmo(0, 0);
 	hud->SetWave(wave);
-	hud->SetZombieCount(zombieObjects.size());
+	hud->SetZombieCount(zombieCount);
 }
 
 void SceneGame::Release()
@@ -86,7 +86,8 @@ void SceneGame::Release()
 	}
 	bullets.clear();
 	player = nullptr;
-	score = hiScore = 0;
+	score = 0;
+	wave = 0;
 }
 
 void SceneGame::Enter()
@@ -100,15 +101,15 @@ void SceneGame::Enter()
 	worldView.setCenter({ 0.f,0.f });
 	uiView.setSize(windowSize);
 
-	TileMap* tileMap = dynamic_cast<TileMap*>(FindGo("Background"));
-	player->SetPosition(centerPos);
+	//tileMap = dynamic_cast<TileMap*>(FindGo("Background"));
 	tileMap->SetPosition(centerPos);
+	boundary = tileMap->GetBoundary();
 	tileMap->SetOrigin(Origins::MC);
 	//tileMap->SetRotation(45);
 	//tileMap->SetScale({ 2.f,2.f });
 	tileMap->UpdateTransform();
-	boundary = tileMap->GetBoundary();
 
+	player->SetPosition(GetBoundaryCenter());
 	worldView.setCenter(player->GetPosition());
 
 }
@@ -124,7 +125,6 @@ void SceneGame::Update(float dt)
 	//findGoAll("Zombie",zombieList,Layer::World); FixedUpdate에서도 설정
 
 	Scene::Update(dt);
-	TileMap* tileMap = dynamic_cast<TileMap*>(FindGo("Background"));
 
 	sf::Vector2f speed = player->GetPosition() - worldView.getCenter();
 	worldView.move(speed * dt * 2.f);
@@ -134,12 +134,7 @@ void SceneGame::Update(float dt)
 	//추가
 	if (InputMgr::GetKey(sf::Keyboard::Space))
 	{
-		CreateZombie(Zombie::Types(rand() % (int)Zombie::Types::Count));
-		CreateItem(Item::Types::HEAL)->SetPosition({ 500,500 });
-	}
-	if (InputMgr::GetKeyDown(sf::Keyboard::Enter))
-	{
-		CreateZombie(Zombie::Types(rand() % (int)Zombie::Types::Count));
+		AddGo(CreateZombie(Zombie::Types(rand() % (int)Zombie::Types::Count)));
 	}
 	//전부 제거
 	if (InputMgr::GetKeyDown(sf::Keyboard::Delete))
@@ -170,10 +165,6 @@ void SceneGame::Update(float dt)
 			delete z;
 		}
 	}
-	if (InputMgr::GetKeyDown(sf::Keyboard::Escape))
-	{
-		doReset = true;
-	}
 
 
 
@@ -183,9 +174,7 @@ void SceneGame::Update(float dt)
 
 void SceneGame::PostUpdate(float dt)
 {
-	//zombieObjects.sort();
-
-
+	zombieObjects.sort();
 
 }
 
@@ -216,13 +205,14 @@ void SceneGame::LateUpdate(float dt)
 		Init();
 		Enter();
 	}
-	hud->SetZombieCount(zombieObjects.size());
 }
 
 void SceneGame::FixedUpdate(float dt)
 {
 	Scene::FixedUpdate(dt);
 	BulletCollision(dt);
+	if (zombieCount <= 0)
+		ChangeWave(++wave);
 }
 
 void SceneGame::Draw(sf::RenderWindow& window)
@@ -260,6 +250,107 @@ Item* SceneGame::CreateItem(Item::Types itemType)
 	return i;
 }
 
+void SceneGame::AddScore(int s)
+{
+	score += s;
+	hud->SetScore(score);
+	hud->SetHiScore(hiScore = std::max(score, hiScore));
+}
+
+
+
+void SceneGame::ChangeWave(int w)
+{
+	this->wave = w;
+
+	ReleaseWave();
+	InitWave();
+
+	hud->SetWave(wave);
+	hud->SetZombieCount(zombieCount);
+
+
+
+}
+
+void SceneGame::ReleaseWave()
+{
+
+	deleteDeque.clear();
+	auto it = gameObjects.begin();
+	while (it != gameObjects.end())
+	{
+		if ((*it)->name == "Player" || (*it)->name == "Background")
+		{
+			it++;
+		}
+		else
+		{
+			delete* it;
+			it = gameObjects.erase(it);
+		}
+	}
+
+	for (auto ptr : zombieObjects)
+	{
+		ptr = nullptr;
+	}
+	zombieObjects.clear();
+	for (auto ptr : spawners)
+	{
+		ptr = nullptr;
+	}
+	spawners.clear();
+	for (auto ptr : bullets)
+	{
+		ptr = nullptr;
+	}
+	bullets.clear();
+}
+
+void SceneGame::InitWave()
+{
+	switch (wave)
+	{
+	case 0:
+		break;
+	case 1:
+		tileMap->Set({ (int)100,(int)100 }, { 50.f,50.f });
+		//tileMap->UpdateTransform();
+		zombieCount = 1000000;
+		break;
+	default:
+		break;
+	}
+
+
+
+	tileMap->SetOrigin(Origins::MC);
+	tileMap->UpdateTransform();
+	boundary = tileMap->GetBoundary();
+	player->SetPosition(GetBoundaryCenter());
+
+	spawners.push_back(new ItemSpawner());
+	spawners.push_back(new ItemSpawner());
+	spawners.push_back(new ItemSpawner());
+	spawners.push_back(new ItemSpawner());
+	spawners.push_back(new ItemSpawner());
+	spawners.push_back(new ZombieSpawner());
+	spawners.push_back(new ZombieSpawner());
+	spawners.push_back(new ZombieSpawner());
+	spawners.push_back(new ZombieSpawner());
+	for (auto s : spawners)
+	{
+		s->SetPosition({ Utils::RandomRange(boundary.first.x,boundary.second.x),Utils::RandomRange(boundary.first.y,boundary.second.y) });
+		AddGo(s);
+		s->Init();
+		s->Reset();
+	}
+}
+
+
+
+
 void SceneGame::BulletCollision(float dt)
 {
 	for (auto zombie : zombieObjects)
@@ -271,13 +362,20 @@ void SceneGame::BulletCollision(float dt)
 			if (!zombie->isDead && !bullet->isHit && Utils::IsCollideWithLineSegment(zombie->GetPosition(), bullet->GetPosition(), bullet->prePos, zombie->GetGlobalBounds().width / 3.f))
 			{
 				bullet->Hit();
-				score += zombie->Damaged(bullet->damage);
-				hud->SetScore(score);
-				hud->SetHiScore(hiScore = std::max(score, hiScore));
+				if (zombie->Damaged(bullet->damage))
+				{
+					AddScore(10);
+					hud->SetZombieCount(--zombieCount);
+				}
 				zombie->SetPosition(zombie->GetPosition() + zombie->GetDirection() * -1.f * 5.f);
 			}
 		}
 	}
+}
+
+sf::Vector2f SceneGame::GetBoundaryCenter()
+{
+	return sf::Vector2f(boundary.first.x + (boundary.second.x - boundary.first.x) * 0.5, boundary.first.y+(boundary.second.y - boundary.first.y)*0.5);
 }
 
 //sf::Vector2f SceneGame::ClampByTileMap(const sf::Vector2f& point)
