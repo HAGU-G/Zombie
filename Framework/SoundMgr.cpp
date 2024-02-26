@@ -18,10 +18,6 @@ void SoundMgr::Init(int totalChannels)
 	{
 		waiting.push_back(new sf::Sound());
 	}
-	for (int i = 0; i < 2; i++)
-	{
-		bgm.push_back(sf::Sound());
-	}
 
 }
 
@@ -45,6 +41,16 @@ void SoundMgr::Release()
 
 void SoundMgr::Update(float dt)
 {
+	if (InputMgr::GetKeyDown(sf::Keyboard::Home))
+	{
+		UpVolumeBGM(10.f);
+	}
+	if (InputMgr::GetKeyDown(sf::Keyboard::End))
+	{
+		DownVolumeBGM(10.f);
+	}
+
+
 
 	auto it = playing.begin();
 	while (it != playing.end())
@@ -59,31 +65,49 @@ void SoundMgr::Update(float dt)
 			it++;
 		}
 	}
-	if (InputMgr::GetKeyDown(sf::Keyboard::Home))
-	{
-		SetVolumeBGM(50.f);
-	}
+
 }
 
-void SoundMgr::PlayBGM(const std::string& id, bool loop, bool crossFade)
+void SoundMgr::PlayBGM(const std::string& id, bool crossFade, bool loop)
 {
 	const sf::SoundBuffer& buffer = RES_MGR_SOUND_BUFFER.Get(id);
-	if (crossFade)
+	if (!crossFade)
 	{
-		bgm[frontBGMIndex].setBuffer(buffer);
 		bgm[frontBGMIndex].stop();
+		bgm[backBGMIndex].stop();
+		bgm[frontBGMIndex].setBuffer(buffer);
 		bgm[frontBGMIndex].setLoop(loop);
 		bgm[frontBGMIndex].play();
+	}
+	else if (!isFading)
+	{
+		bgm[backBGMIndex].setBuffer(buffer);
+		bgm[backBGMIndex].setLoop(loop);
+		bgm[backBGMIndex].setVolume(0.f);
+		bgm[backBGMIndex].play();
+
+		int temp = frontBGMIndex;
+		frontBGMIndex = backBGMIndex;
+		backBGMIndex = frontBGMIndex;
 	}
 }
 
 void SoundMgr::StopBGM(const std::string& id)
 {
+	for (int i = 0; i < _countof(bgm); i++)
+	{
+		bgm[i].stop();
+		isFading = false;
+	}
 }
 
 void SoundMgr::PlaySfx(const std::string& id, bool loop)
 {
 	PlaySfx(RES_MGR_SOUND_BUFFER.Get(id), loop);
+}
+
+void SoundMgr::MixingBGM(float dt)
+{
 }
 
 void SoundMgr::PlaySfx(sf::SoundBuffer& buffer, bool loop)
@@ -101,7 +125,6 @@ void SoundMgr::PlaySfx(sf::SoundBuffer& buffer, bool loop)
 		sound = waiting.front();
 		waiting.pop_front();
 	}
-
 
 	sound->setBuffer(buffer);
 	sound->setLoop(loop);
@@ -127,7 +150,7 @@ void SoundMgr::SetVolumeSfx(float value)
 	{
 		sfxVolume = 0.f;
 	}
-	else if(value > 100.0f)
+	else if (value > 100.0f)
 	{
 		sfxVolume = 100.f;
 	}
@@ -140,6 +163,7 @@ void SoundMgr::SetVolumeSfx(float value)
 
 void SoundMgr::SetVolumeBGM(float value)
 {
+	float preBgmVol = bgmVolume;
 	if (value < 0.0f)
 	{
 		bgmVolume = 0.f;
@@ -153,9 +177,16 @@ void SoundMgr::SetVolumeBGM(float value)
 		bgmVolume = value;
 	}
 
-	for (auto& sound : bgm)
+	bgm[frontBGMIndex].setVolume(bgmVolume);
+	if (!isFading)
 	{
-		sound.setVolume(bgmVolume);
+
+		bgm[backBGMIndex].setVolume(bgmVolume);
+	}
+	else
+	{
+		float v = bgm[backBGMIndex].getVolume() * (preBgmVol == 0.f ? 0.f : (bgmVolume / preBgmVol));
+		bgm[backBGMIndex].setVolume(v >= 100.f ? 100.f : v);
 	}
 
 }
@@ -167,5 +198,5 @@ void SoundMgr::UpVolumeBGM(float value)
 
 void SoundMgr::DownVolumeBGM(float value)
 {
-	SetVolumeBGM(bgmVolume + value);
+	SetVolumeBGM(bgmVolume - value);
 }

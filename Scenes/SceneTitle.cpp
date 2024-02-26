@@ -28,5 +28,5 @@ void SceneTitle::Update(float dt)
 void SceneTitle::Enter()
 {
 	Scene::Enter();
-	SOUND_MGR.PlayBGM("sound/SellBuyMusic1.wav");
+	SOUND_MGR.PlayBGM("sound/SellBuyMusic1.wav",false);
 }

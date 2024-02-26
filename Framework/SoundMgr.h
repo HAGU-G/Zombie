@@ -10,8 +10,9 @@ private:
 	virtual ~SoundMgr();
 
 	//플레이 리스트 기능을 추가하면 좋을 것 같다.
-	std::vector<sf::Sound> bgm;
+	sf::Sound bgm[2];
 	int frontBGMIndex = 0;
+	int backBGMIndex = 1;
 
 	bool isFading = false;
 	float fadeDuration = 1.f;
@@ -34,6 +35,7 @@ public:
 	
 	void PlayBGM(const std::string& id, bool loop = true, bool crossFade = true);
 	void StopBGM(const std::string& id);
+	void MixingBGM(float dt);
 	
 	void PlaySfx(const std::string& id, bool loop = false);
 	void PlaySfx(sf::SoundBuffer& buffer, bool loop = false);
