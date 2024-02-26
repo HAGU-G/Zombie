@@ -18,6 +18,7 @@
 
 #include "Defines.h"
 #include "Utils.h"
+#include "SoundMgr.h"
 #include "Framework.h"
 #include "InputMgr.h"
 #include "ResourceMgr.h"

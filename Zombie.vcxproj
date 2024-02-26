@@ -173,6 +173,7 @@
     <ClCompile Include="Scenes\SceneTitle.cpp" />
     <ClCompile Include="GameObjects\Spawner.cpp" />
     <ClCompile Include="GameObjects\UI\UIHUD.cpp" />
+    <ClCompile Include="Framework\SoundMgr.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bullet2.h" />
@@ -205,6 +206,7 @@
     <ClInclude Include="Scenes\SceneTitle.h" />
     <ClInclude Include="GameObjects\Spawner.h" />
     <ClInclude Include="GameObjects\UI\UIHUD.h" />
+    <ClInclude Include="Framework\SoundMgr.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

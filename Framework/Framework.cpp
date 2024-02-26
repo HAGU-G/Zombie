@@ -12,6 +12,7 @@ void Framework::Init(int width, int height, const std::string& name)
     //window.setFramerateLimit(15);
 
     InputMgr::Init();
+    SOUND_MGR.Init();
     SCENE_MGR.Init();
 }
 
@@ -36,6 +37,7 @@ void Framework::Do()
             InputMgr::UpdateEvent(event);
         }
         InputMgr::Update(GetDT());
+        SOUND_MGR.Update(GetDT());
 
 
         SCENE_MGR.Update(GetDT());
@@ -54,6 +56,7 @@ void Framework::Do()
 void Framework::Release()
 {
     SCENE_MGR.Release();
+    SOUND_MGR.Release();
     
     RES_MGR_TEXTURE.UnloadAll();
     RES_MGR_FONT.UnloadAll();
