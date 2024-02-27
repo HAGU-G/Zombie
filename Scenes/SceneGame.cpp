@@ -25,15 +25,7 @@ void SceneGame::Init()
 
 	hud = dynamic_cast<UIHUD*>(AddGo(new UIHUD(), Scene::Ui));
 
-	AddGo(new DebugString(), Scene::Ui);
-
-	//기존HP
-	//healthBar.setSize({ (float)player->maxHp,40 });
-	//healthBar.setFillColor(sf::Color::Red);
-	//Utils::SetOrigin(healthBar, Origins::BC);
-	//healthBar.setPosition({ FRAMEWORK.GetWindow().mapPixelToCoords(FRAMEWORK.GetWindowSize(),uiView).x * 0.5f
-	//	, FRAMEWORK.GetWindow().mapPixelToCoords(FRAMEWORK.GetWindowSize(), uiView).y * 0.95f });
-
+	//AddGo(new DebugString(), Scene::Ui);
 
 	//배경
 	tileMap = dynamic_cast<TileMap*>(AddGo(new TileMap("Background")));
@@ -59,6 +51,10 @@ void SceneGame::Init()
 	AddGo(player);
 
 	Scene::Init();
+
+	//웨이브
+	wave = 0;
+	zombieCount = 1;
 
 	hud->SetScore(score);
 	hud->SetHiScore(hiScore);
@@ -118,58 +114,75 @@ void SceneGame::Exit()
 {
 	Scene::Exit();
 	FRAMEWORK.GetWindow().setMouseCursorVisible(true);
+	doReset = true;
 }
 
 void SceneGame::Update(float dt)
 {
-	//findGoAll("Zombie",zombieList,Layer::World); FixedUpdate에서도 설정
-
-	Scene::Update(dt);
-
-	sf::Vector2f speed = player->GetPosition() - worldView.getCenter();
-	worldView.move(speed * dt * 2.f);
-	if (Utils::Distance(player->GetPosition(), worldView.getCenter()) <= 1.f && InputMgr::GetAxis(Axis::Horizontal) == 0.f && InputMgr::GetAxis(Axis::Vertical) == 0.f)
-		worldView.setCenter(player->GetPosition());
-
-	//추가
-	if (InputMgr::GetKey(sf::Keyboard::Space))
+	switch (status)
 	{
-		AddGo(CreateZombie(Zombie::Types(rand() % (int)Zombie::Types::Count)));
-	}
-	//전부 제거
-	if (InputMgr::GetKeyDown(sf::Keyboard::Delete))
-	{
-		while (zombieObjects.size() > 0)
+		/////////////////////////////////////////////////////////////////////////////PLAY
+	case SceneGame::Status::PLAY:
+		Scene::Update(dt);
+		//추가
+		if (InputMgr::GetKeyDown(sf::Keyboard::Space))
 		{
-			Zombie* temp = zombieObjects.front();
-			RemoveGo(temp);
-			zombieObjects.pop_front();
-			delete temp;
-		}
-	}
-	//하나씩 랜덤하게 제거
-	if (InputMgr::GetKey(sf::Keyboard::BackSpace))
-	{
-		size_t siz = zombieObjects.size();
-		if (siz != 0)
-		{
-			int t = rand() % siz;
-			auto it = zombieObjects.begin();
-			for (int i = 0; i < t; i++)
+			for (auto s : spawners)
 			{
-				it++;
+				if (s->name == "ZombieSpawner")
+					s->Spawn(1);
 			}
-			RemoveGo(*it);
-			Zombie* z = *it;
-			zombieObjects.remove(*it);
-			delete z;
 		}
+		//전부 제거
+		if (InputMgr::GetKeyDown(sf::Keyboard::Delete))
+		{
+			while (zombieObjects.size() > 0)
+			{
+				Zombie* temp = zombieObjects.front();
+				RemoveGo(temp);
+				zombieObjects.pop_front();
+				delete temp;
+			}
+		}
+		//하나씩 랜덤하게 제거
+		if (InputMgr::GetKey(sf::Keyboard::BackSpace))
+		{
+			size_t siz = zombieObjects.size();
+			if (siz != 0)
+			{
+				int t = rand() % siz;
+				auto it = zombieObjects.begin();
+				for (int i = 0; i < t; i++)
+				{
+					it++;
+				}
+				RemoveGo(*it);
+				Zombie* z = *it;
+				zombieObjects.remove(*it);
+				delete z;
+			}
+		}
+		PostUpdate(dt);
+
+		if (InputMgr::GetKeyDown(sf::Keyboard::Enter))
+		{
+			status = Status::PAUSE;
+		}
+
+		break;
+		////////////////////////////////////////////////////////////////////////////PAUSE
+	case SceneGame::Status::PAUSE:
+
+		if (InputMgr::GetKeyDown(sf::Keyboard::Enter))
+		{
+			status = Status::PLAY;
+		}
+		crosshair->Update(dt);
+
+		break;
+	default:
+		break;
 	}
-
-
-
-
-	PostUpdate(dt);
 }
 
 void SceneGame::PostUpdate(float dt)
@@ -180,39 +193,67 @@ void SceneGame::PostUpdate(float dt)
 
 void SceneGame::LateUpdate(float dt)
 {
-	Scene::LateUpdate(dt);
-
-	//오브젝트 삭제 (delete)
-	while (deleteDeque.size() > 0)
+	switch (status)
 	{
-		//필요한 정보를 미리 가져온다.
-		GameObject* temp = deleteDeque.front();
-		int tag = temp->GetTag();
+	case SceneGame::Status::PLAY:
+		Scene::LateUpdate(dt);
 
-		//삭제 시작
-		RemoveGo(temp);
-		deleteDeque.pop_front();
-		if (tag == 0)
-			zombieObjects.remove(dynamic_cast<Zombie*>(temp));
-		else if (tag == 1)
-			bullets.remove(dynamic_cast<Bullet*>(temp));
-		delete temp;
+		//오브젝트 삭제 (delete)
+		while (deleteDeque.size() > 0)
+		{
+			//필요한 정보를 미리 가져온다.
+			GameObject* temp = deleteDeque.front();
+			int tag = temp->GetTag();
+
+			//삭제 시작
+			RemoveGo(temp);
+			deleteDeque.pop_front();
+			if (tag == 0)
+				zombieObjects.remove(dynamic_cast<Zombie*>(temp));
+			else if (tag == 1)
+				bullets.remove(dynamic_cast<Bullet*>(temp));
+			delete temp;
+		}
+		if (doReset)
+		{
+			doReset = false;
+			Release();
+			Init();
+			Enter();
+		}
+		break;
+	case SceneGame::Status::PAUSE:
+		crosshair->LateUpdate(dt);
+		break;
+	default:
+		break;
 	}
-	if (doReset)
-	{
-		doReset = false;
-		Release();
-		Init();
-		Enter();
-	}
+
 }
 
 void SceneGame::FixedUpdate(float dt)
 {
-	Scene::FixedUpdate(dt);
-	BulletCollision(dt);
-	if (zombieCount <= 0)
-		ChangeWave(++wave);
+	switch (status)
+	{
+	case SceneGame::Status::PLAY:
+		Scene::FixedUpdate(dt);
+		BulletCollision(dt);
+		if (zombieCount <= 0)
+			ChangeWave(++wave);
+		break;
+	case SceneGame::Status::PAUSE:
+		crosshair->FixedUpdate(dt);
+		break;
+	default:
+		break;
+	}
+
+
+	sf::Vector2f viewSpeed = player->GetPosition() - worldView.getCenter();
+	worldView.move(viewSpeed * dt * 2.f);
+	//worldView.setCenter(Utils::Lerp(worldView.getCenter(), player->GetPosition(), dt));
+	if (Utils::Distance(player->GetPosition(), worldView.getCenter()) <= 1.f && InputMgr::GetAxis(Axis::Horizontal) == 0.f && InputMgr::GetAxis(Axis::Vertical) == 0.f)
+		worldView.setCenter(player->GetPosition());
 }
 
 void SceneGame::Draw(sf::RenderWindow& window)
@@ -269,8 +310,7 @@ void SceneGame::ChangeWave(int w)
 	hud->SetWave(wave);
 	hud->SetZombieCount(zombieCount);
 
-
-
+	status = Status::PLAY;
 }
 
 void SceneGame::ReleaseWave()
@@ -315,7 +355,7 @@ void SceneGame::InitWave()
 	case 0:
 		break;
 	case 1:
-		tileMap->Set({ (int)100,(int)100 }, { 50.f,50.f });
+		tileMap->Set({ (int)20,(int)100 }, { 50.f,50.f });
 		//tileMap->UpdateTransform();
 		zombieCount = 1000000;
 		break;

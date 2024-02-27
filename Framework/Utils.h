@@ -35,10 +35,15 @@ public:
 	static float DegreeToRadian(float degree);
 	static float Angle(const sf::Vector2f& vec);
 	static void Rotate(sf::Vector2f& vec, float degree); //회전
+	static float Lerp(float min, float max, float t); //선형보간
+	static sf::Vector2f Lerp(const sf::Vector2f& min, const sf::Vector2f& max, float t); //선형보간
+
 
 	//충돌
 	static void ElasticCollision(float& coord, float border, float cor = 1.f);
 	static float GetElasticCollision(float coord, float border, float cor = 1.f);
 	static bool IsCollideWithLineSegment(const sf::Vector2f& p1, const sf::Vector2f& lineP1, const sf::Vector2f& lineP2, float radius);
 
+
+	
 };

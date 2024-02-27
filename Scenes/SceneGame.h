@@ -14,6 +14,13 @@ class Crosshair;
 class SceneGame : public Scene
 {
 protected:
+	enum class Status
+	{
+		PLAY,
+		PAUSE,
+	};
+	Status status = Status::PAUSE;
+
 	Player* player;
 	UIHUD* hud;
 	TileMap* tileMap;

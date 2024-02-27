@@ -154,6 +154,22 @@ void Utils::Rotate(sf::Vector2f& vec, float degree)
 	vec = GetNormalize(sf::Transform().rotate(degree) * vec);
 }
 
+//t는 0.f ~ 1.f
+float Utils::Lerp(float min, float max, float t)
+{
+	
+	float v = min + (max - min) * Clamp(t, 0.f, 1.f);
+
+	return v;
+}
+
+sf::Vector2f Utils::Lerp(const sf::Vector2f& min, const sf::Vector2f& max, float t)
+{
+	sf::Vector2f v = min + (max - min) * Clamp(t, 0.f, 1.f);
+
+	return v;
+}
+
 void Utils::ElasticCollision(float& coord, float border, float cor)
 {
 	coord = border - (coord - border) * cor;
@@ -220,3 +236,7 @@ bool Utils::IsCollideWithLineSegment(const sf::Vector2f& p1, const sf::Vector2f&
 	}
 	return false;
 }
+
+
+
+//선형보관

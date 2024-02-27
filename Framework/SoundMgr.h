@@ -15,7 +15,7 @@ private:
 	int backBGMIndex = 1;
 
 	bool isFading = false;
-	float fadeDuration = 2.f;
+	float fadeDuration = 5.f;
 	float fadeTimer = 0.f;
 	float frontMixingSpeed = 0.f;
 	float backMixingSpeed = 0.f;
@@ -55,6 +55,10 @@ public:
 
 	size_t GetPlayingCount() { return playing.size(); }
 	size_t GetWaitingCount() { return waiting.size(); }
+
+
+	void NewPlayBGM(std::string id, bool crossFade = true);
+	void NewFading(float dt);
 
 };
 

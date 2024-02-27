@@ -78,6 +78,7 @@ void SoundMgr::Update(float dt)
 	if (isFading)
 	{
 		MixingBGM(dt);
+		//NewFading(dt);
 	}
 
 
@@ -143,12 +144,10 @@ void SoundMgr::MixingBGM(float dt)
 	bgm[frontBGMIndex].setVolume(frontVol >= bgmVolume ? bgmVolume : frontVol);
 	bgm[backBGMIndex].setVolume(backVol <= 0.f ? 0.f : backVol);
 
-
 	//페이드가 끝나지 않았음에도 BGM을 전환시킬 때 사용..?
 	//bgm을 배열이 아닌 list같은 컨테이너로 만들면 가능할 듯함.
 	/*if (bgm[backBGMIndex].getVolume() == 0.f)
 		bgm[backBGMIndex].stop();*/
-
 
 	//크로스 페이드 종료
 	fadeTimer += dt;
@@ -156,8 +155,12 @@ void SoundMgr::MixingBGM(float dt)
 	{
 		fadeTimer = 0.f;
 		bgm[backBGMIndex].stop();
+		bgm[frontBGMIndex].setVolume(bgmVolume);
+		bgm[backBGMIndex].setVolume(0.f);
 		isFading = false;
 	}
+
+
 
 }
 
@@ -222,6 +225,35 @@ void SoundMgr::UpVolumeSfx(float value)
 void SoundMgr::DownVolumeSfx(float value)
 {
 	SetVolumeSfx(sfxVolume - value);
+}
+
+void SoundMgr::NewPlayBGM(std::string id, bool crossFade)
+{
+	isFading = true;
+	fadeTimer = 0.f;
+	bgm[0].setBuffer(RES_MGR_SOUND_BUFFER.Get(id));
+	bgm[0].setVolume(0.f);
+	bgm[0].setLoop(true);
+	bgm[0].play();
+
+}
+
+void SoundMgr::NewFading(float dt)
+{
+	if (isFading)
+	{
+		fadeTimer += dt;
+		float t = fadeTimer / fadeDuration;
+
+		float vol = bgm[0].getVolume();
+		bgm[0].setVolume(Utils::Lerp(vol, bgmVolume, dt));
+
+		if (fadeTimer > fadeDuration)
+		{
+			isFading = false;
+			fadeTimer = 0.f;
+		}
+	}
 }
 
 void SoundMgr::SetVolumeBGM(float value)
