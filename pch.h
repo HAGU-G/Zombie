@@ -16,6 +16,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 
+//Framework
 #include "Defines.h"
 #include "Utils.h"
 #include "SoundMgr.h"
@@ -23,6 +24,9 @@
 #include "InputMgr.h"
 #include "ResourceMgr.h"
 #include "SceneMgr.h"
+#include "DataTableMgr.h"
+#include "StringTable.h"
 
+//
 #include "Scene.h"
 #include "GameObject.h"

@@ -21,5 +21,5 @@ void ZombieSpawner::Reset()
 GameObject* ZombieSpawner::Create()
 {
 	Zombie::Types zombieType = zombieTypes[Utils::RandomRange(0, zombieTypes.size())];
-	return dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrentScene())->CreateZombie(zombieType);
+	return Zombie::Create(zombieType);
 }

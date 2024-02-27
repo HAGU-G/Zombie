@@ -133,7 +133,13 @@ void Player::Shot()
 	{
 		ammo--;
 		hud->SetAmmo(ammo, totalAmmo);
-		dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrentScene())->CreateBullet(this);
+
+		Bullet* b = Bullet::Create(this);
+		b->Init();
+		b->Reset();
+		SCENE_MGR.GetCurrentScene()->AddGo(b);
+		dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrentScene())->bullets.push_back(b);
+
 		dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrentScene())->crosshair->MotionShot();
 		SOUND_MGR.PlaySfx("sound/shoot.wav");
 	}

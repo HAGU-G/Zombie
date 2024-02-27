@@ -56,7 +56,6 @@ public:
 	void Exit() override;
 
 	void Update(float dt) override;
-	void PostUpdate(float dt);
 	void LateUpdate(float dt) override;
 	void FixedUpdate(float dt) override;
 
@@ -64,10 +63,6 @@ public:
 
 	inline Player* GetPlayer() { return player; }
 	inline const std::pair<sf::Vector2f, sf::Vector2f>& GetBoundary() const { return boundary; }
-
-	Zombie* CreateZombie(Zombie::Types zombieType);
-	Bullet* CreateBullet(Player* player);
-	Item* CreateItem(Item::Types itemType);
 
 	void AddScore(int s);
 

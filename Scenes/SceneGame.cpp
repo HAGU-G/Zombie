@@ -162,7 +162,7 @@ void SceneGame::Update(float dt)
 				delete z;
 			}
 		}
-		PostUpdate(dt);
+		zombieObjects.sort();
 
 		if (InputMgr::GetKeyDown(sf::Keyboard::Enter))
 		{
@@ -183,12 +183,6 @@ void SceneGame::Update(float dt)
 	default:
 		break;
 	}
-}
-
-void SceneGame::PostUpdate(float dt)
-{
-	zombieObjects.sort();
-
 }
 
 void SceneGame::LateUpdate(float dt)
@@ -259,36 +253,6 @@ void SceneGame::FixedUpdate(float dt)
 void SceneGame::Draw(sf::RenderWindow& window)
 {
 	Scene::Draw(window);
-}
-
-
-Zombie* SceneGame::CreateZombie(Zombie::Types zombieType)
-{
-	Zombie* z = Zombie::Create(zombieType);
-	z->Init();
-	z->Reset();
-	z->SetPlayer(player);
-	zombieObjects.push_back(z);
-	return z;
-}
-
-Bullet* SceneGame::CreateBullet(Player* player)
-{
-	Bullet* b = Bullet::Create(player);
-	b->Init();
-	b->Reset();
-	AddGo(b);
-	bullets.push_back(b);
-	return b;
-}
-
-Item* SceneGame::CreateItem(Item::Types itemType)
-{
-	Item* i = Item::Create(Item::Types::HEAL);
-	i->Init();
-	i->Reset();
-	AddGo(i);
-	return i;
 }
 
 void SceneGame::AddScore(int s)

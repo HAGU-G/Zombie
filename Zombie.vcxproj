@@ -109,7 +109,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>.\GameObjects\Effect;.;.\SFML-2.6.1\include;.\Framework;.\GameObjects\Base;.\GameObjects\UI;.\GameObjects;.\Scenes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\GameObjects\Effect;.\Framework\Manager;.;.\SFML-2.6.1\include;.\Framework;.\GameObjects\Base;.\GameObjects\UI;.\GameObjects;.\Scenes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
@@ -138,12 +138,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Bullet2.cpp" />
+    <ClCompile Include="Framework\Manager\DataTableMgr.cpp" />
     <ClCompile Include="GameObjects\UI\DebugString.cpp" />
     <ClCompile Include="GameObjects\Effect\EffectBlood.cpp" />
     <ClCompile Include="GameObjects\UI\Crosshair.cpp" />
     <ClCompile Include="GameObjects\Bullet.cpp" />
     <ClCompile Include="Framework\Framework.cpp" />
-    <ClCompile Include="Framework\InputMgr.cpp">
+    <ClCompile Include="Framework\Manager\InputMgr.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Framework\RenderWindowRBR.cpp" />
@@ -165,7 +166,7 @@
     <ClCompile Include="GameObjects\Player.cpp" />
     <ClCompile Include="Scenes\SceneGame.cpp" />
     <ClCompile Include="Scenes\Scene.cpp" />
-    <ClCompile Include="Framework\SceneMgr.cpp" />
+    <ClCompile Include="Framework\Manager\SceneMgr.cpp" />
     <ClCompile Include="GameObjects\Base\SpriteGo.cpp" />
     <ClCompile Include="GameObjects\Base\TextGo.cpp" />
     <ClCompile Include="GameObjects\TileMap.cpp" />
@@ -173,19 +174,23 @@
     <ClCompile Include="Scenes\SceneTitle.cpp" />
     <ClCompile Include="GameObjects\Spawner.cpp" />
     <ClCompile Include="GameObjects\UI\UIHUD.cpp" />
-    <ClCompile Include="Framework\SoundMgr.cpp" />
+    <ClCompile Include="Framework\Manager\SoundMgr.cpp" />
+    <ClCompile Include="Framework\StringTable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bullet2.h" />
+    <ClInclude Include="Framework\DataTable.h" />
+    <ClInclude Include="Framework\Manager\DataTableMgr.h" />
+    <ClInclude Include="Framework\rapidcsv.h" />
     <ClInclude Include="GameObjects\UI\DebugString.h" />
     <ClInclude Include="GameObjects\Effect\EffectBlood.h" />
     <ClInclude Include="GameObjects\UI\Crosshair.h" />
     <ClInclude Include="GameObjects\Bullet.h" />
     <ClInclude Include="Framework\Framework.h" />
     <ClInclude Include="Framework\Defines.h" />
-    <ClInclude Include="Framework\InputMgr.h" />
+    <ClInclude Include="Framework\Manager\InputMgr.h" />
     <ClInclude Include="Framework\RenderWindowRBR.h" />
-    <ClInclude Include="Framework\ResourceMgr.h" />
+    <ClInclude Include="Framework\Manager\ResourceMgr.h" />
     <ClInclude Include="Framework\Singleton.h" />
     <ClInclude Include="Framework\Utils.h" />
     <ClInclude Include="GameObjects\Base\GameObject.h" />
@@ -197,7 +202,7 @@
     <ClInclude Include="GameObjects\Player.h" />
     <ClInclude Include="Scenes\SceneGame.h" />
     <ClInclude Include="Scenes\Scene.h" />
-    <ClInclude Include="Framework\SceneMgr.h" />
+    <ClInclude Include="Framework\Manager\SceneMgr.h" />
     <ClInclude Include="GameObjects\Base\SpriteGo.h" />
     <ClInclude Include="GameObjects\Base\TextGo.h" />
     <ClInclude Include="GameObjects\TileMap.h" />
@@ -206,7 +211,8 @@
     <ClInclude Include="Scenes\SceneTitle.h" />
     <ClInclude Include="GameObjects\Spawner.h" />
     <ClInclude Include="GameObjects\UI\UIHUD.h" />
-    <ClInclude Include="Framework\SoundMgr.h" />
+    <ClInclude Include="Framework\Manager\SoundMgr.h" />
+    <ClInclude Include="Framework\StringTable.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Framework\InputMgr.cpp">
+    <ClCompile Include="Framework\Manager\InputMgr.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Framework\Utils.cpp">
@@ -30,7 +30,7 @@
     <ClCompile Include="Scenes\Scene.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Framework\SceneMgr.cpp">
+    <ClCompile Include="Framework\Manager\SceneMgr.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="GameObjects\Base\GameObject.cpp">
@@ -99,7 +99,13 @@
     <ClCompile Include="GameObjects\UI\UIHUD.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Framework\SoundMgr.cpp">
+    <ClCompile Include="Framework\Manager\SoundMgr.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\StringTable.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\Manager\DataTableMgr.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -107,7 +113,7 @@
     <ClInclude Include="Framework\Defines.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Framework\InputMgr.h">
+    <ClInclude Include="Framework\Manager\InputMgr.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Framework\Utils.h">
@@ -116,7 +122,7 @@
     <ClInclude Include="pch.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Framework\ResourceMgr.h">
+    <ClInclude Include="Framework\Manager\ResourceMgr.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Framework\Singleton.h">
@@ -125,7 +131,7 @@
     <ClInclude Include="Scenes\Scene.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Framework\SceneMgr.h">
+    <ClInclude Include="Framework\Manager\SceneMgr.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="GameObjects\Base\GameObject.h">
@@ -194,7 +200,19 @@
     <ClInclude Include="GameObjects\UI\UIHUD.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Framework\SoundMgr.h">
+    <ClInclude Include="Framework\Manager\SoundMgr.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\rapidcsv.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\DataTable.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\Manager\DataTableMgr.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\StringTable.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

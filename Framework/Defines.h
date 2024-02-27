@@ -11,3 +11,9 @@ enum class Sides
 {
 	None = -1, Left, Right, Count
 };
+
+enum class Languages
+{
+	Korean,
+	English,
+};

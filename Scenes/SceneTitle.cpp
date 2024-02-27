@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "SceneTitle.h"
 #include "SpriteGo.h"
+#include "rapidcsv.h"
 
 SceneTitle::SceneTitle(SceneIds id)
 	:Scene(id)
@@ -23,10 +24,25 @@ void SceneTitle::Update(float dt)
 	{
 		SCENE_MGR.ChangeScene(SceneIds::SceneGame);
 	}
+	if (InputMgr::GetKeyDown(sf::Keyboard::S))
+	{
+		DT_STRING->Load(Languages::English);
+	}
+	if (InputMgr::GetKeyDown(sf::Keyboard::D))
+	{
+		DT_STRING->Load(Languages::Korean);
+	}
+	if (InputMgr::GetKeyDown(sf::Keyboard::A))
+	{
+		std::cout << DT_STRING->Get("a") << std::endl;
+	}
 }
 
 void SceneTitle::Enter()
 {
 	Scene::Enter();
 	SOUND_MGR.PlayBGM("sound/SellBuyMusic1.wav");
+
+
+
 }

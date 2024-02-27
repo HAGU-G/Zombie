@@ -45,6 +45,12 @@ Zombie* Zombie::Create(Types zombieType)
 		break;
 	}
 
+	zombie->Init();
+	zombie->Reset();
+	zombie->player=dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrentScene())->GetPlayer();
+	dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrentScene())->zombieObjects.push_back(zombie);
+
+
 	return zombie;
 }
 
