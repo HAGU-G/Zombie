@@ -2,18 +2,39 @@
 #include "SceneTitle.h"
 #include "SpriteGo.h"
 #include "rapidcsv.h"
+#include "AniTest.h"
+#include "AniTop.h"
 
 SceneTitle::SceneTitle(SceneIds id)
 	:Scene(id)
 {
-	SpriteGo* bg = new SpriteGo("bg");
-	bg->SetTexture("graphics/background.png");
-	AddGo(bg, Scene::Ui);
+
 }
 
 void SceneTitle::Init()
 {
+	ground.setFillColor(sf::Color::White);
+	ground.setSize({ 500,500 });
+	Utils::SetOrigin(ground, Origins::MC);
+	ground.setPosition(sf::Vector2f(FRAMEWORK.GetWindowSize()) * 0.5f);
+	ground.rotate(45);
+
+
+	aniTest = new AniTest();
+	AddGo(aniTest);
+	aniTop = new AniTop();
+	AddGo(aniTop);
+
 	Scene::Init();
+
+	aniTest->Reset();
+	aniTest->SetPosition(sf::Vector2f(FRAMEWORK.GetWindowSize()) * 0.5f);
+
+
+	aniTop->Reset();
+	aniTop->SetPosition(sf::Vector2f(FRAMEWORK.GetWindowSize()) * 0.5f);
+
+
 }
 
 void SceneTitle::Update(float dt)
@@ -24,17 +45,11 @@ void SceneTitle::Update(float dt)
 	{
 		SCENE_MGR.ChangeScene(SceneIds::SceneGame);
 	}
-	if (InputMgr::GetKeyDown(sf::Keyboard::S))
+	if (!(aniTest->onGround) && aniTest->GetGlobalBounds().intersects(ground.getGlobalBounds()))
 	{
-		DT_STRING->Load(Languages::English);
-	}
-	if (InputMgr::GetKeyDown(sf::Keyboard::D))
-	{
-		DT_STRING->Load(Languages::Korean);
-	}
-	if (InputMgr::GetKeyDown(sf::Keyboard::A))
-	{
-		std::cout << DT_STRING->Get("a") << std::endl;
+		aniTest->SetPosition({ aniTest->GetPosition().x, ground.getPosition().y });
+		aniTest->onGround = true;
+		aniTest->jumpSpeed = 0.f;
 	}
 }
 
@@ -45,4 +60,10 @@ void SceneTitle::Enter()
 
 
 
+}
+
+void SceneTitle::Draw(sf::RenderWindow& window)
+{
+	window.draw(ground);
+	Scene::Draw(window);
 }

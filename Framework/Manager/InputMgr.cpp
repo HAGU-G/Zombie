@@ -15,11 +15,9 @@ void InputMgr::Init()
     infoH.positives.push_back(sf::Keyboard::D);
     infoH.positives.push_back(sf::Keyboard::Right);
     //infoH.positives.push_back(MouseButtonToKey(sf::Mouse::Button::Right));
-
     infoH.negatives.push_back(sf::Keyboard::A);
     infoH.negatives.push_back(sf::Keyboard::Left);
     //infoH.negatives.push_back(MouseButtonToKey(sf::Mouse::Button::Left));
-
     infoH.sensi = 8.f;
     infoH.value = 0.f;
     axisInfoMap.insert({ infoH.axis, infoH });
@@ -89,8 +87,10 @@ void InputMgr::Update(float dt)
  
         axisInfo.value += speed * axisInfo.sensi * dt;
         axisInfo.value = Utils::Clamp(axisInfo.value, -1.f, 1.f);
+        
+        bool over = (speed > 0) ? (axisInfo.value > 0.f) : (axisInfo.value < 0.f);
 
-        if (raw == 0.f && abs(axisInfo.value) < speed * axisInfo.sensi * dt)
+        if (raw == 0.f && over)
         {
             axisInfo.value = 0.f;
         }

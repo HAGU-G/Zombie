@@ -1,5 +1,6 @@
 #pragma once
 #include "Singleton.h"
+struct AnimationClip;
 
 template<typename T>
 class ResourceMgr : public Singleton<ResourceMgr<T>>
@@ -8,6 +9,7 @@ class ResourceMgr : public Singleton<ResourceMgr<T>>
 
 private:
 	std::unordered_map<std::string, T*> resources;
+
 
 	ResourceMgr() = default;
 	virtual ~ResourceMgr()
@@ -20,16 +22,16 @@ public:
 
 	bool Load(const std::string& filePath)
 	{
+		T* res = new T();
+
 		if (resources.find(filePath) != resources.end())
 			return false;
 
-		T* res = new T();
 		bool success = res->loadFromFile(filePath);
 		if (success)
 		{
-			//resources[id] = res;
+
 			resources.insert({ filePath, res });
-			//resources.insert(std::unordered_map<std::string, T*>::make_pair(id, res))
 		}
 		return success;
 	}
@@ -56,6 +58,12 @@ public:
 
 	T& Get(const std::string& filePath, bool load = true)
 	{
+		//std::string newPath;
+		//if (typeid(T).name() == typeid(AnimationClip).name())
+		//{
+		//	newPath = "data/" + filePath + ".csv";
+		//}
+
 		auto it = resources.find(filePath);
 		if (it != resources.end())
 			return *(it->second);
@@ -80,3 +88,4 @@ T ResourceMgr<T>::Empty;
 #define RES_MGR_TEXTURE (ResourceMgr<sf::Texture>::Instance())
 #define RES_MGR_FONT (ResourceMgr<sf::Font>::Instance())
 #define RES_MGR_SOUND_BUFFER (ResourceMgr<sf::SoundBuffer>::Instance())
+#define RES_MGR_ANI_CLIP (ResourceMgr<AnimationClip>::Instance())

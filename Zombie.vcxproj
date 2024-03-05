@@ -137,6 +137,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Animator.cpp" />
+    <ClCompile Include="AniTest.cpp" />
+    <ClCompile Include="AniTop.cpp" />
     <ClCompile Include="Bullet2.cpp" />
     <ClCompile Include="Framework\Manager\DataTableMgr.cpp" />
     <ClCompile Include="GameObjects\UI\DebugString.cpp" />
@@ -178,6 +181,9 @@
     <ClCompile Include="Framework\StringTable.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Animator.h" />
+    <ClInclude Include="AniTest.h" />
+    <ClInclude Include="AniTop.h" />
     <ClInclude Include="Bullet2.h" />
     <ClInclude Include="Framework\DataTable.h" />
     <ClInclude Include="Framework\Manager\DataTableMgr.h" />
